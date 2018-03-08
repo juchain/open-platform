@@ -1,4 +1,4 @@
-package com.blockshine.common.util;
+package com.blockshine.common.constant;
 
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -1,6 +1,7 @@
 package com.blockshine.authentication.util;
 
 
+import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.util.*;
 

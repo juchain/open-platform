@@ -5,7 +5,7 @@ import com.blockshine.authentication.dto.AuthorizationDTO;
 import com.blockshine.authentication.service.TokenService;
 import com.blockshine.authentication.util.AccessTokenUtil;
 import com.blockshine.common.exception.BusinessException;
-import com.blockshine.common.util.CodeConstant;
+import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.util.JedisUtil;
 
 import com.blockshine.authentication.dao.ApplicationDao;
