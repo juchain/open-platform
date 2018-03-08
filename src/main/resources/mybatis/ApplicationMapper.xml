@@ -21,4 +21,11 @@
 		status = 1;
 	</select>
 
+	<select id="findAppSecret" resultType="String" parameterType="String">
+		 select app_key as appKey
+		from application
+		where app_key = #{appKey}
+		 and status = 1
+	</select>
+
 </mapper>
