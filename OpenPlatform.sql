@@ -54,9 +54,9 @@ CREATE TABLE `application` (
 
   `app_status` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用状态',
 
-  `app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用key',
+  `app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用key  唯一性',
 
-  `app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用秘钥',
+  `app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用秘钥  唯一性',
 
   PRIMARY KEY (`app_id`)
 
@@ -88,8 +88,8 @@ INSERT INTO `bcuser` VALUES (3, NOW(), NOW(),1,'13222222222','123456','ABCD');
 
 INSERT INTO `application` VALUES (1, NOW(), NOW(),1,1,'众筹','A','A','1','ABCD');
 
-INSERT INTO `application` VALUES (2, NOW(), NOW(),1,2,'征信','A','A','1','EFGH');
+INSERT INTO `application` VALUES (2, NOW(), NOW(),1,2,'征信','A','A','12','EFGH');
 
-INSERT INTO `application` VALUES (3, NOW(), NOW(),1,3,'监管','A','A','1','ASDF');
+INSERT INTO `application` VALUES (3, NOW(), NOW(),1,3,'监管','A','A','13','ASDF');
 
 -- test 脚本 end------------------------------
