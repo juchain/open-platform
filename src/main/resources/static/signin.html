@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="full-screen" content="yes">
+    <meta name="x5-fullscreen" content="true">
+    <link rel="icon" href="images/favicon.png">
+    <script type="text/javascript" src="js/vendor/jquery-3.3.1.min.js"></script>
+
+    <!-- Page title -->
+    <title>Blockshine</title>
+    <style>
+        body, h1, h2, h3, h4, h5, h6, hr, p, blockquote, dl, dt, dd, ul, ol, li, pre, form, fieldset, legend, button, input, textarea, th, td { margin:0; padding:0; }
+        body, button, input, select, textarea { font:12px/1.5 tahoma, arial, \5b8b\4f53; }
+        h1, h2, h3, h4, h5, h6{ font-size:100%; }
+        address, cite, dfn, em, var { font-style:normal; }
+        code, kbd, pre, samp { font-family:couriernew, courier, monospace; }
+        small{ font-size:12px; }
+        ul, ol { list-style:none; }
+        a { text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        sup { vertical-align:text-top; }
+        sub{ vertical-align:text-bottom; }
+        legend { color:#000; }
+        fieldset, img { border:0; }
+        button, input, select, textarea { font-size:100%; }
+        table { border-collapse:collapse; border-spacing:0; }
+        body{
+            /*background: #2f323b;*/
+            width: auto;
+            height: auto;
+            background: url(./images/loginabg.jpg) repeat-x;
+            /*background-position: center;*/
+            /*background-size: 100%;*/
+        }
+        a {
+            outline: 0;
+            color: inherit;
+            text-decoration: none;
+        }
+        h1{
+            font-size: 24px;
+            color: #1daad8;
+            /*margin-top: 50px;*/
+        }
+        .register{
+            color:#1daad8;
+            font-size:18px;
+            padding: 10px 0;
+            margin-left:43%;
+            margin-top: 20px;
+        }
+        .main {
+            padding-top: 30px;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-flex-align: center;
+            align-items: center;
+        }
+        .main > div:first-child {
+              -webkit-box-flex: 1;
+              -webkit-flex: 1 1 auto;
+              -ms-flex: 1 1 auto;
+              flex: 1 1 auto;
+          }
+
+        .content {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            -ms-flex-pack: center;
+            justify-content: center;
+            margin: 0 auto;
+            margin-top: 100px;
+            width: 32%;
+            min-width: 300px;
+            background: rgba(255,255,255,0.3);
+            box-sizing: border-box;
+            border-radius: 15px;
+        }
+        .form{
+            max-width: 80%;
+            margin: 0 10%;
+        }
+        @media (max-width: 768px) {
+            .main {
+                height: auto;
+                min-height: 100%;
+                width: 32%;
+                min-width: 300px;
+                margin: 0 auto;
+
+            }
+            .content {
+                -webkit-box-pack: start;
+                -webkit-justify-content: flex-start;
+                -ms-flex-pack: start;
+                justify-content: flex-start;
+                margin-top:15%;
+                width: 32%;
+                min-width: 300px;
+            }
+            h1{
+                margin-top: 0px;
+            }
+            .register{
+                padding: 10px 0;
+                margin-left: 63%;
+                margin-top: 40px;
+            }
+            logo{
+                margin: 25px auto 20px;
+            }
+        }
+
+
+        .LoginHeader {
+            text-align: center;
+        }
+        .content > div:last-child {
+            min-height: 296px;
+        }
+
+        .form {
+            position: relative;
+            margin-top: 16px;
+            height: 42px;
+            font-size: 14px;
+        }
+
+       .content .form > input {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            padding-left: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            color: #fff;
+            -webkit-appearance: none;
+            box-sizing: border-box;
+            background: rgba(255,255,255,0.4);
+        }
+        .form>input::-webkit-input-placeholder {
+            color: #fff
+        }
+
+        .form>input:-ms-input-placeholder {
+            color: #fff
+        }
+        input{outline:none}
+        .form>input::placeholder {
+            color: #fff
+        }
+
+        .form>input:focus,.form>input:active {
+            border:1px solid #0089dc;
+            border-color: #0089dc;
+        }
+        .LoginHeader-nav {
+            margin-top: 10px;
+            margin-bottom: 40px;
+            font-size: 0px;
+        }
+        .LoginHeader-nav>span {
+            font-size: 14px;
+            padding-bottom: 4px;
+            cursor: pointer;
+            padding: 10px;
+            background: -o-gradient(linear, 0% 25%, 75% 100%, from(#5cbca5), to(#1daad8)); /* Opera 11.1 - 12.0 */
+            background: -moz-gradient(linear, 0% 25%, 75% 100%, from(#5cbca5), to(#1daad8)); /* Firefox 3.6 - 15 */
+            background: -webkit-gradient(linear, 0% 25%, 75% 100%, from(#5cbca5), to(#1daad8));
+            display:inline-block;
+            width: 60%;
+            border-radius:8px;
+            color: #fff;
+            font-weight: 700;
+        }
+        .logo{
+            margin: 15px auto 5px;
+            width: 100px;
+        }
+        section:nth-child(2),section:nth-child(3){
+            margin-top:42px;
+        }
+        div.tip p{
+            color: #ccc;
+            text-align: left;
+        }
+        .errtip{
+            color:red;
+            font-size: 14px;
+            padding: 2px 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="main">
+    <div class="content">
+        <div class="LoginHeader">
+            <img class="logo" src="images/favicon.png">
+            <h1>Blockshine</h1>
+        <div>
+            <form>
+                <section class="form"><input class="name" type="text" autocapitalize="on" placeholder="name" />
+                    <!--<div class="tip"><p>*Please enter the username above 3 alpha-bits characters</p></div>-->
+                    </section>
+                <section class="form"><input class="password" placeholder="password" type="password" autocapitalize="on">
+                    <!--<div class="tip"><p>*Please enter at least 6 alpha-bits</p></div>-->
+                </section>
+                <section class="form repsw" style="display: none"><input class="repassword" placeholder="repeat password" type="password" autocapitalize="on">
+                <div class="tip"><p>Please reconfirm the input password</p></div>
+                </section>
+                <p class="register j-toggle">>>register</p>
+                <div class="LoginHeader-nav">
+                    <p class="errtip"></p>
+                   <span class="LoginHeader-log active">Go</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+<script type="text/javascript">
+    var local="10.10.10.111";
+    var flag=true;
+    var tip=$(".errtip");
+    $('.j-toggle').on('click', function() {
+        flag=!flag;
+        $(this).html(flag?">>register":">>login");
+        $(".repsw").css("display",flag?"none":"block");
+    });
+    $(".LoginHeader-log").on("click",regorlog);
+    function regorlog() {
+        var name=$(".name").val();
+        var password=$(".password").val();
+        var repassword=$(".repassword").val();
+        if(!name){
+            tip.text("Name is required");
+            return false;
+        }
+        if(!password){
+            tip.text("Password is required");
+            return false;
+        }
+        //注册
+        if(!flag){
+            if(!repassword){
+                tip.text("Repassword is required");
+                return false;
+            }
+            if(password!==repassword){
+                tip.text("Both passwords must be the same");
+                return false;
+            }else{
+                register("/account/register",name,password)
+            }
+        }else{
+            login("/account/login",name,password);
+        }
+    }
+    function register(url,name,password){
+        var data={
+            "username":name,
+            "password":password
+        }
+        $.ajax({
+            type:"POST",
+            data:JSON.stringify(data),
+            dataType:'json',
+            contentType: "application/json",
+            url:'http://bs.blockshine.net/account/register',
+            success : function(data) {
+                if(data&&data.code===0){
+                    console.log(data);
+                    localStorage.setItem("coinname",name);
+                    window.location.href="/accountDetail.html";
+                }else {
+                    tip.text(data.message);
+                }
+
+            }
+        });
+    }
+    function login(url,name,password) {
+        var data={
+            "username":name,
+            "password":password
+        }
+        $.ajax({
+            type:"POST",
+            data:JSON.stringify(data),
+            dataType:'json',
+            contentType: "application/json",
+            url:'http://bs.blockshine.net/account/login',
+            success : function(data) {
+                if(data&&data.code===0){
+                    console.log(data);
+                    localStorage.setItem("coinname",name);
+                    if(data.isAdmin=="true"||data.isAdmin==true){
+                        window.location.href="http://bs.blockshine.net/wallet";
+                    }else{
+                        window.location.href="/accountDetail.html";
+                    }
+
+                }else {
+                    tip.text(data.message);
+                }
+            }
+        });
+    }
+    $("input").focus(function(){
+        $(".errtip").text("");
+    });
+</script>
+</html>

@@ -1,0 +1,469 @@
+/*
+ * Copyright 2015, 2016 Ether.Camp Inc. (US)
+ * This file is part of Ethereum Harmony.
+ *
+ * Ethereum Harmony is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Ethereum Harmony is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Ethereum Harmony.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Tasks:
+ *  - runMain
+ *  - runClassic
+ *  - runRopsten
+ *  - runTest
+ *  - runPrivate
+ *  - bootRun
+ *
+ * Gradle options (supplied with `-P` prefix):
+ *  - jvmArgs - adding Java VM options;
+ *  - useMavenLocal - prefer locally installed maven libraries.
+ *
+ * System properties (supplied with `-D` prefix):
+ *
+ * Default heap size is 1.5G, unless user change via command line or run `runPrivate` task,
+ * which sets 3.5 GB.
+ */
+
+ext.maxHeapSize = '-Xmx1500m' // default is 1G, but could be changed via command line or launched task type
+
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "http://nexus.blockshine.net/repository/maven-public/" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.2"
+        classpath "co.riiid:gradle-github-plugin:0.4.2" // github releases
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
+apply plugin: "com.github.johnrengelman.shadow"
+
+// check if -PuseMavenLocal is supplied
+if (project.hasProperty('useMavenLocal')) {
+    println "Flag enabled: using EthereumJ jar from maven local repo if exist"
+    repositories {
+        mavenLocal()
+    }
+}
+
+repositories {
+
+    mavenLocal()
+    jcenter()
+    mavenCentral()
+    maven { url "http://nexus.blockshine.net/repository/maven-public/" }
+
+    maven { url "https://oss.jfrog.org/libs-snapshot/" }
+    maven { url "https://dl.bintray.com/ethereum/maven/" }
+    maven { url "https://repo.spring.io/libs-snapshot" }
+    jcenter()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web"
+    compile(group: 'org.springframework.boot', name: 'spring-boot-starter', version: '1.5.6.RELEASE') {
+        exclude(module: 'commons-logging')
+    }
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '1.5.6.RELEASE'
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-websocket"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.43'
+    compile group: 'org.mybatis', name: 'mybatis', version: '3.4.4'
+    compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '1.1.1'
+    compile group: 'com.alibaba', name: 'druid', version: '1.0.28'
+//    compile "org.springframework.boot:spring-boot-devtools"
+
+    compile "org.hsqldb:hsqldb"
+    compile 'com.h2database:h2:1.4.191'
+
+//    compile "com.google.guava:guava:19.0"
+
+    // Be sure also change value inside `ContractsTests.java`
+    compile "org.ethereum:solcJ-all:0.4.8"                   // Solidity Compiler win/mac/linux binaries
+
+    // don't forget to adjust {ethereumJ.version} in application.properties
+    compile ("org.ethereum:eth-core:1.7.3") {
+        changing = true
+
+        exclude group: "log4j"
+        exclude group: "org.slf4j", module: "log4j-over-slf4j"
+        exclude group: "org.slf4j", module: "slf4j-log4j12"
+        exclude group: "org.ethereum", module: "solcJ-all"
+    }
+
+    compile "org.springframework:spring-context:4.2.0.BUILD-SNAPSHOT"
+    compile "commons-codec:commons-codec:1.10"
+    compile "org.projectlombok:lombok:1.16.4"
+    compile "com.maxmind.geoip:geoip-api:1.3.1"
+    compile "com.github.briandilley.jsonrpc4j:jsonrpc4j:1.4.6"
+    compile "javax.portlet:portlet-api:2.0"
+    compile "org.apache.commons:commons-io:1.3.2"
+
+    compile "org.functionaljava:functionaljava:4.6"
+    compile "org.functionaljava:functionaljava-java8:4.6"
+
+    compile "com.mashape.unirest:unirest-java:1.3.1"
+
+    /* WEB DEPENDENCIES */
+    compile("org.webjars.bower:bootstrap:3.3.6")
+    compile("org.webjars:jquery:2.2.4")
+
+//    compile("org.webjars.bower:angular:1.5.8")
+    compile("org.webjars.bower:angular-route:1.5.8")
+    compile("org.webjars.bower:angular-animate:1.5.8")
+
+    compile("org.webjars.bower:sockjs-client:1.1.1")
+    compile("org.webjars.bower:filesize:3.2.1")
+    compile("org.webjars.bower:toastr:2.1.2")
+    compile("org.webjars.bower:pace:1.0.2")
+    compile("org.webjars.bower:font-awesome:4.6.3")
+    compile("org.webjars.bower:animate.css:3.5.2")
+    compile("org.webjars.bower:moment:2.14.1")
+
+    compile("org.webjars.bower:datamaps:0.5.7")
+    compile("org.webjars.bower:d3:3.5.17")
+    compile("org.webjars.bower:topojson:1.6.26")
+
+//    compile("org.webjars:jquery.terminal:0.10.11")
+    compile("org.webjars.bower:jquery-mousewheel:3.1.13")
+    compile("org.webjars.bower:malihu-custom-scrollbar-plugin:3.1.5")
+//    compile("org.webjars.bower:ng-scrollbars:0.0.10")
+    compile("org.webjars.bower:angular-ui:0.4.0")
+    compile("org.webjars.bower:underscore:1.8.3")
+    compile("org.webjars.npm:bignumber.js:2.4.0")
+
+    compile group: 'org.apache.shiro', name: 'shiro-core', version: '1.3.2'
+    compile group: 'org.apache.shiro', name: 'shiro-spring', version: '1.3.2'
+    compile group: 'org.apache.shiro', name: 'shiro-ehcache', version: '1.3.2'
+
+    // desktop GUI
+    compile group: 'com.dorkbox', name: 'SystemTray', version: '2.20'
+    compile group: 'org.codehaus.janino', name: 'janino', version: '3.0.6'  // for having if-statement in logback.xml
+    
+	// https://mvnrepository.com/artifact/com.alibaba/fastjson
+	compile group: 'com.alibaba', name: 'fastjson', version: '1.1.15'
+    compile group: 'redis.clients', name: 'jedis', version: '2.6.2'
+
+    testCompile "junit:junit"
+    testCompile "org.springframework:spring-test"
+    testCompile "org.springframework.boot:spring-boot-starter-test"
+    testCompile "org.apache.httpcomponents:fluent-hc:4.5.2"
+
+//    compile group: 'org.springframework', name: 'spring-test', version: '2.5'
+
+
+}
+
+apply from: 'desktop.gradle'
+
+mainClassName = 'com.ethercamp.harmony.Application'
+def defaultJvmArgs = ["-server",
+                      "-Xss2M",
+                      "-XX:+UseCompressedOops",
+                      "-XX:+HeapDumpOnOutOfMemoryError",
+                      "-XX:-OmitStackTraceInFastThrow"]
+
+applicationDefaultJvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"]
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.4.1'
+}
+
+task stage {
+    dependsOn bootRepackage
+}
+
+// note that the code in the block below get executed at early beginning
+// when gradle parses script
+bootRun {
+    // point logback to config to use
+    // without this line logback will warn that it finds 2 files (in core.jar and in this app)
+    putIfEmpty System.properties, "logback.configurationFile", "src/main/resources/logback.xml"
+
+    systemProperties = System.properties
+
+    addResources = true
+
+    def args = []
+    args.addAll(defaultJvmArgs)
+    if ( project.hasProperty('jvmArgs') ) {
+        println "Adding properties from jvmArgs " + project.jvmArgs
+
+        project.jvmArgs.split('\\s+').each {
+            if (it) {       // prevent empty string, which could cause "Error: Could not find or load main class"
+                args.add(it)
+            }
+        }
+    }
+
+    jvmArgs.addAll(args)
+//    println "After adding " + jvmArgs
+}
+
+bootRepackage {
+    excludeDevtools = true
+}
+
+springBoot {
+    mainClass = "com.ethercamp.harmony.Application"
+}
+
+test {
+    dependsOn cleanTest
+    testLogging.showStandardStreams = true
+}
+
+sourceCompatibility=1.8
+
+// to keep method arguments names in bytecode
+// used for terminal code completion
+[compileJava, compileTestJava]*.options*.compilerArgs = ['-parameters']
+
+
+//configurations.all {
+//    // check for updates every build
+//    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//}
+
+
+/**
+ * Tasks for connecting to predefined networks.
+ * It is not possible to override task defined values from command line.
+ */
+task runMain() {
+    doLast {
+        addJvmArgIfEmpty "database.dir", getDatabaseDir("database")
+        addJvmArgIfEmpty "sync.fast.enabled", "true"
+        addJvmArgIfEmpty "ethereumj.conf.res", "ethereumj.conf"
+        addJvmArgIfEmpty "database.name", "database"
+        addJvmArgIfEmpty "networkProfile", "main"
+        bootRunWithNetworkConfig('main', false)
+    }
+}
+
+task runRopsten() {
+    doLast {
+        bootRunWithNetworkConfig('ropsten', true)
+    }
+}
+
+task runTest() {
+    doLast {
+        bootRunWithNetworkConfig('test', true)
+    }
+}
+
+task runPrivate() {
+    doLast {
+        // change default max heap value for this task as it involves mining
+        maxHeapSize = "-Xmx3500M"
+
+        bootRunWithNetworkConfig('private', true)
+    }
+}
+
+
+task runDebug() {
+    doLast {
+        // change default max heap value for this task as it involves mining
+        maxHeapSize = "-Xmx3500M"
+
+        bootRunWithNetworkConfigByDebug('private', true)
+    }
+}
+
+
+
+
+
+task runClassic() {
+    doLast {
+        addJvmArgIfEmpty "sync.fast.enabled", "true"
+        bootRunWithNetworkConfig('classic', true)
+    }
+}
+
+task runCustom() {
+    doLast {
+        def newArgs = []
+        newArgs.add('-DnetworkProfile=custom')
+
+        if (System.getProperty('ethereumj.conf.file') == null) {
+            addJvmArgIfEmpty "database.dir", getDatabaseDir("database-custom")
+        }
+
+        // set heap size configure in task
+        if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
+            println('Set default heap size for task ' + maxHeapSize)
+            newArgs.add(maxHeapSize)
+        } else {
+            println('Using heap size from user input ' + project.jvmArgs)
+        }
+
+        bootRun.jvmArgs.addAll(newArgs)
+        println 'Running Java with ' + bootRun.jvmArgs
+
+        tasks.compileJava.execute()
+        tasks.bootRun.execute()
+    }
+}
+
+def getDatabaseDir(String name) {
+    return System.getProperty("user.home") + "/" + name
+}
+
+def bootRunWithNetworkConfigByDebug(String name, boolean includePresets) {
+    def newArgs = []
+    if (includePresets) {
+        addJvmArgIfEmpty "database.dir", getDatabaseDir("database-" + name)
+        newArgs.addAll([
+                '-Dethereumj.conf.res=' + name + '.conf',
+                '-Dorg.gradle.debug=true',
+                '-Ddatabase.name=database-' + name,
+                '-DnetworkProfile=' + name])
+
+
+    }
+
+    // set heap size configure in task
+    if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
+        println('Set default heap size for task ' + maxHeapSize)
+        newArgs.add(maxHeapSize)
+    } else {
+        println('Using heap size from user input ' + project.jvmArgs)
+    }
+
+    bootRun.jvmArgs.addAll(newArgs)
+    println 'Running Java with ' + bootRun.jvmArgs
+
+    tasks.compileJava.execute()
+    tasks.bootRun.execute()
+}
+
+def bootRunWithNetworkConfig(String name, boolean includePresets) {
+    def newArgs = []
+    if (includePresets) {
+        addJvmArgIfEmpty "database.dir", getDatabaseDir("database-" + name)
+        newArgs.addAll([
+                '-Dethereumj.conf.res=' + name + '.conf',
+                '-Ddatabase.name=database-' + name,
+                '-DnetworkProfile=' + name])
+
+
+    }
+
+    // set heap size configure in task
+    if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
+        println('Set default heap size for task ' + maxHeapSize)
+        newArgs.add(maxHeapSize)
+    } else {
+        println('Using heap size from user input ' + project.jvmArgs)
+    }
+
+    bootRun.jvmArgs.addAll(newArgs)
+    println 'Running Java with ' + bootRun.jvmArgs
+
+    tasks.compileJava.execute()
+    tasks.bootRun.execute()
+}
+
+
+def putIfEmpty(Properties properties, String key, String value) {
+    // don't use System.hasProperty as it is groovy wrapper
+    if (System.getProperty(key) == null) {
+        properties.put key, value
+    }
+}
+
+def addJvmArgIfEmpty(String key, String value) {
+    boolean hasSystemProperty = System.getProperty(key) != null;
+    if (!hasSystemProperty) {
+        bootRun.jvmArgs.add('-D' + key + '=' + value)
+    }
+}
+
+
+
+task webjar(type: Jar, dependsOn: "jar") {
+    from(fileTree("dist")) {
+        into "META-INF/resources"
+    }
+}
+
+/**
+ * Run import blocks action.
+ * Be sure to pass genesis, database location and path to blocks.
+ * @example `./gradlew
+ *                  -Ddatabase.dir=database-private -Dgenesis=frontier-private.json
+ *                  -Dblocks.loader=blocks.rlp -Dblocks.format=rlp`
+ */
+task importBlocks(type: JavaExec) {
+    main                "org.ethereum.Start"
+    classpath           sourceSets.main.runtimeClasspath
+    description         "Running import blocks"
+
+    // pass CLI properties (set of -Dprop=value) to forked java process
+    systemProperties    System.properties
+    systemProperty      "logback.configurationFile", "src/main/resources/logback.xml"
+    systemProperty      "peer.discovery.enabled", false
+    systemProperty      "peer.listen.port", 0
+    systemProperty      "sync.enabled", false
+}
+
+def env = System.getProperty("env") ?: "dev"
+
+jar{
+    doFirst {
+        copy {
+            from "build/resources/main/env/${env}"
+            into "build/resources/main"
+        }
+        delete("build/resources/main/env")
+    }
+}
+
+compileJava(){
+    println("env:[${env}]")
+    doLast {
+        copy {
+            from "build/resources/main/env/${env}"
+            into "build/resources/main"
+        }
+        delete("build/resources/main/env")
+    }
+}
+
+
+//
+//tasks.processResources.doLast() {
+//    println 'This will be printed after the build task even if something else calls the build task'
+//
+//    File versionfile = file(new File('build/resources/main/build-info.properties'))
+//    versionfile.text = [
+////            'build.hash=' + gitCommitHash(),
+////            'build.time=' + buildTime(),
+////            'build.branch=' + gitCurBranch(),
+//            'build.number=' + getNextBuildNumber()
+//    ].join('\n')
+//}

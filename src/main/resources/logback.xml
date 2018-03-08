@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!--
+        If variable is not defined in system properties -> try to load it from application.properties
+    -->
+    <if condition='!isDefined("logs.dir")'>
+        <then>
+            <property resource="application.properties" />
+        </then>
+    </if>
+
+    <!-- Be sure to flush latest logs on exit -->
+    <shutdownHook class="ch.qos.logback.core.hook.DelayingShutdownHook"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %p [%c{1}]  %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${logs.dir}/harmony.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- rollover hourly -->
+            <fileNamePattern>${logs.dir}/harmony-%d{yyyy-MM-dd_HH}.log.zip</fileNamePattern>
+            <!-- ~1 month -->
+            <maxHistory>10</maxHistory>
+            <totalSizeCap>50MB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %p [%c{1}]  %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- Don't discard INFO, DEBUG, TRACE events in case of queue is 80% full -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- Default is 256 -->
+        <!-- Logger will block incoming events (log calls) until queue will free some space -->
+        <!-- (the smaller value -> flush occurs often) -->
+        <queueSize>100</queueSize>
+
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <!-- performance is pretty lower then WARN! -->
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+
+</configuration>
