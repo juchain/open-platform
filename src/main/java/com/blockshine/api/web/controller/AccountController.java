@@ -50,7 +50,7 @@ public class AccountController {
 			transHash = accountService.sendCoin(sendDTO.getFrom(), sendDTO.getTo(), sendDTO.getAmount(),
 					sendDTO.getPassword());
 		} catch (Exception e) {
-			log.error("转账失败",e);
+//			log.error("转账失败",e);
 			result.put("code", "9");
 			result.put("message", "Failed ! Send error ");
 			return result;

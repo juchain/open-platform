@@ -70,14 +70,6 @@ public class ApplicationConfig extends WebMvcConfigurerAdapter {
 //        return registration;
 //    }
 
-    /**
-     * Configuration of filter which gathers JSON-RPC invocation stats.
-     */
-    @Bean
-    public JsonRpcUsageFilter rpcUsageFilter() {
-        return new JsonRpcUsageFilter();
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         if (!registry.hasMappingForPattern("/webjars/**")) {

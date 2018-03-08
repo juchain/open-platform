@@ -68,9 +68,8 @@ if (project.hasProperty('useMavenLocal')) {
 repositories {
 
     mavenLocal()
-    jcenter()
-    mavenCentral()
     maven { url "http://nexus.blockshine.net/repository/maven-public/" }
+    mavenCentral()
 
     maven { url "https://oss.jfrog.org/libs-snapshot/" }
     maven { url "https://dl.bintray.com/ethereum/maven/" }
@@ -249,28 +248,6 @@ sourceCompatibility=1.8
  * Tasks for connecting to predefined networks.
  * It is not possible to override task defined values from command line.
  */
-task runMain() {
-    doLast {
-        addJvmArgIfEmpty "database.dir", getDatabaseDir("database")
-        addJvmArgIfEmpty "sync.fast.enabled", "true"
-        addJvmArgIfEmpty "ethereumj.conf.res", "ethereumj.conf"
-        addJvmArgIfEmpty "database.name", "database"
-        addJvmArgIfEmpty "networkProfile", "main"
-        bootRunWithNetworkConfig('main', false)
-    }
-}
-
-task runRopsten() {
-    doLast {
-        bootRunWithNetworkConfig('ropsten', true)
-    }
-}
-
-task runTest() {
-    doLast {
-        bootRunWithNetworkConfig('test', true)
-    }
-}
 
 task runPrivate() {
     doLast {
@@ -281,95 +258,12 @@ task runPrivate() {
     }
 }
 
-
-task runDebug() {
-    doLast {
-        // change default max heap value for this task as it involves mining
-        maxHeapSize = "-Xmx3500M"
-
-        bootRunWithNetworkConfigByDebug('private', true)
-    }
-}
-
-
-
-
-
-task runClassic() {
-    doLast {
-        addJvmArgIfEmpty "sync.fast.enabled", "true"
-        bootRunWithNetworkConfig('classic', true)
-    }
-}
-
-task runCustom() {
-    doLast {
-        def newArgs = []
-        newArgs.add('-DnetworkProfile=custom')
-
-        if (System.getProperty('ethereumj.conf.file') == null) {
-            addJvmArgIfEmpty "database.dir", getDatabaseDir("database-custom")
-        }
-
-        // set heap size configure in task
-        if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
-            println('Set default heap size for task ' + maxHeapSize)
-            newArgs.add(maxHeapSize)
-        } else {
-            println('Using heap size from user input ' + project.jvmArgs)
-        }
-
-        bootRun.jvmArgs.addAll(newArgs)
-        println 'Running Java with ' + bootRun.jvmArgs
-
-        tasks.compileJava.execute()
-        tasks.bootRun.execute()
-    }
-}
-
 def getDatabaseDir(String name) {
     return System.getProperty("user.home") + "/" + name
 }
 
-def bootRunWithNetworkConfigByDebug(String name, boolean includePresets) {
-    def newArgs = []
-    if (includePresets) {
-        addJvmArgIfEmpty "database.dir", getDatabaseDir("database-" + name)
-        newArgs.addAll([
-                '-Dethereumj.conf.res=' + name + '.conf',
-                '-Dorg.gradle.debug=true',
-                '-Ddatabase.name=database-' + name,
-                '-DnetworkProfile=' + name])
-
-
-    }
-
-    // set heap size configure in task
-    if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
-        println('Set default heap size for task ' + maxHeapSize)
-        newArgs.add(maxHeapSize)
-    } else {
-        println('Using heap size from user input ' + project.jvmArgs)
-    }
-
-    bootRun.jvmArgs.addAll(newArgs)
-    println 'Running Java with ' + bootRun.jvmArgs
-
-    tasks.compileJava.execute()
-    tasks.bootRun.execute()
-}
-
 def bootRunWithNetworkConfig(String name, boolean includePresets) {
     def newArgs = []
-    if (includePresets) {
-        addJvmArgIfEmpty "database.dir", getDatabaseDir("database-" + name)
-        newArgs.addAll([
-                '-Dethereumj.conf.res=' + name + '.conf',
-                '-Ddatabase.name=database-' + name,
-                '-DnetworkProfile=' + name])
-
-
-    }
 
     // set heap size configure in task
     if (!project.hasProperty('jvmArgs') || project.jvmArgs.indexOf('-Xmx') == -1) {
@@ -400,7 +294,6 @@ def addJvmArgIfEmpty(String key, String value) {
         bootRun.jvmArgs.add('-D' + key + '=' + value)
     }
 }
-
 
 
 task webjar(type: Jar, dependsOn: "jar") {
@@ -451,17 +344,3 @@ compileJava(){
         delete("build/resources/main/env")
     }
 }
-
-
-//
-//tasks.processResources.doLast() {
-//    println 'This will be printed after the build task even if something else calls the build task'
-//
-//    File versionfile = file(new File('build/resources/main/build-info.properties'))
-//    versionfile.text = [
-////            'build.hash=' + gitCommitHash(),
-////            'build.time=' + buildTime(),
-////            'build.branch=' + gitCurBranch(),
-//            'build.number=' + getNextBuildNumber()
-//    ].join('\n')
-//}

@@ -57,13 +57,13 @@ public class ContractsController {
     @Autowired
     ContractsService contractsService;
 
-    @RequestMapping("/contracts/{address}/storage")
-    public Page<StorageEntry> getContractStorage(@PathVariable String address,
-                                                 @RequestParam(required = false) String path,
-                                                 @RequestParam(required = false, defaultValue = "0") int page,
-                                                 @RequestParam(required = false, defaultValue = "5") int size) {
-        return contractsService.getContractStorage(address, path, new PageRequest(page, size));
-    }
+//    @RequestMapping("/contracts/{address}/storage")
+//    public Page<StorageEntry> getContractStorage(@PathVariable String address,
+//                                                 @RequestParam(required = false) String path,
+//                                                 @RequestParam(required = false, defaultValue = "0") int page,
+//                                                 @RequestParam(required = false, defaultValue = "5") int size) {
+//        return contractsService.getContractStorage(address, path, new PageRequest(page, size));
+//    }
 
     @RequestMapping(value = "/contracts/add", method = RequestMethod.POST)
     public ActionStatus<ContractInfoDTO> addContractSources(@RequestBody WatchContractDTO watchContract) {

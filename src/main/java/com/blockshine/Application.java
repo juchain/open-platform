@@ -47,7 +47,6 @@ import javax.servlet.Filter;
 
 @SpringBootApplication
 @EnableScheduling
-@Import({EthereumHarmonyConfig.class})
 public class Application {
 
     //4 core + 8 giga-bytes configuration
