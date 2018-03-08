@@ -26,9 +26,6 @@ import java.util.Optional;
 import com.blockshine.api.web.filter.AccessFilter;
 import org.apache.coyote.http11.AbstractHttp11JsseProtocol;
 import org.apache.tomcat.util.net.Nio2Channel;
-import org.ethereum.Start;
-import org.ethereum.config.SystemProperties;
-import org.ethereum.facade.Ethereum;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -100,30 +97,7 @@ public class Application {
      * - perform action and exit on completion.
      */
     public static void main(String[] args) throws Exception {
-        final List<String> actions = asList("importBlocks");
-
-        final Optional<String> foundAction = asList(args).stream()
-                .filter(arg -> actions.contains(arg))
-                .findFirst();
-
-        if (foundAction.isPresent()) {
-            foundAction.ifPresent(action -> System.out.println("Performing action: " + action));
-            Start.main(args);
-            // system is expected to exit after action performed
-        } else {
-            if (!SystemProperties.getDefault().blocksLoader().equals("")) {
-                SystemProperties.getDefault().setSyncEnabled(false);
-                SystemProperties.getDefault().setDiscoveryEnabled(false);
-            }
-
-            ConfigurableApplicationContext context = SpringApplication.run(new Object[]{Application.class}, args);
-
-            Ethereum ethereum = context.getBean(Ethereum.class);
-
-            if (!SystemProperties.getDefault().blocksLoader().equals("")) {
-                ethereum.getBlockLoader().loadBlocks();
-            }
-        }
+        SpringApplication.run(Application.class, args);
     }
 }
 
