@@ -18,27 +18,17 @@
 
 package com.blockshine;
 
-import static java.util.Arrays.asList;
-
-import java.util.List;
-import java.util.Optional;
-
-import com.blockshine.api.web.filter.AccessFilter;
 import org.apache.coyote.http11.AbstractHttp11JsseProtocol;
 import org.apache.tomcat.util.net.Nio2Channel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomizer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import javax.servlet.Filter;
 
 
 
@@ -64,31 +54,6 @@ public class Application {
         });
 
         return tomcatEmbeddedServletContainerFactory;
-    }
-
-
-
-    /**
-     * 配置过滤器
-     * @return
-     */
-    @Bean
-    public FilterRegistrationBean someFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(accessFilter());
-        registration.addUrlPatterns("/*");
-        registration.addInitParameter("paramName", "paramValue");
-        registration.setName("accessFilter");
-        return registration;
-    }
-
-    /**
-     * 创建一个bean
-     * @return`
-     */
-    @Bean(name = "accessFilter")
-    public Filter accessFilter() {
-        return new AccessFilter();
     }
 
     /**
