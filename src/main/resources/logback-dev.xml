@@ -89,7 +89,7 @@
     <logger level="DEBUG" name="harmony"/>
     <logger level="DEBUG" name="jsonrpc"/>
     <logger level="INFO" name="org.springframework.web.servlet.DispatcherServlet"/>
-    <logger level="DEBUG" name="com.ethercamp.harmony"/>
+    <logger level="DEBUG" name="com.blockshine.api"/>
 
     <!-- Contract data -->
     <logger level="INFO" name="web-profiler"/>

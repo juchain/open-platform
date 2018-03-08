@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ethercamp.harmony.dao.AccountDao">
+<mapper namespace="com.blockshine.api.dao.AccountDao">
 
-	<resultMap id="BaseResultMap" type="com.ethercamp.harmony.dto.AccountDTO">
+	<resultMap id="BaseResultMap" type="com.blockshine.api.dto.AccountDTO">
 		<id column="id" property="id" jdbcType="BIGINT" />
 		<result column="username" property="username" jdbcType="VARCHAR" />
 		<result column="address" property="address" jdbcType="VARCHAR" />
 	</resultMap>
 
-	<insert id="inserAccount" parameterType="com.ethercamp.harmony.dto.AccountDTO"
+	<insert id="inserAccount" parameterType="com.blockshine.api.dto.AccountDTO"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into block_user
 		(
@@ -25,7 +25,7 @@
 		)
 	</insert>
 
-	<update id="updateAccount" parameterType="com.ethercamp.harmony.dto.AccountDTO">
+	<update id="updateAccount" parameterType="com.blockshine.api.dto.AccountDTO">
 		update block_user
 		set address = #{address,jdbcType=VARCHAR}
 		where
@@ -34,7 +34,7 @@
 	</update>
 
 	<select id="userNameExists" resultType="java.lang.Integer"
-		parameterType="com.ethercamp.harmony.dto.AccountDTO">
+		parameterType="com.blockshine.api.dto.AccountDTO">
 		select count(id)
 		from block_user
 		where
@@ -45,7 +45,7 @@
 	</select>
 
 	<select id="checkLogin" resultMap="BaseResultMap"
-		parameterType="com.ethercamp.harmony.dto.AccountDTO">
+		parameterType="com.blockshine.api.dto.AccountDTO">
 		select id,username,address
 		from block_user
 		where
@@ -56,7 +56,7 @@
 	</select>
 
 	<select id="accountInfo" resultMap="BaseResultMap"
-		parameterType="com.ethercamp.harmony.dto.AccountDTO">
+		parameterType="com.blockshine.api.dto.AccountDTO">
 		select id,username,address
 		from block_user
 		where

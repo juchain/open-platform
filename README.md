@@ -1,5 +1,5 @@
-# Eth Web Node
-Ethereum network private peer. Based on Eth-Core implementation.
+# open-platform
+blockshine开放平台
 
 # Build
-gradle clean build -x test
+gradle clean runPrivate -Denv=[dev/test/prd]

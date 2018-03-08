@@ -48,5 +48,5 @@ mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: mybatis/*Mapper.xml
-  typeAliasesPackage: com.ethercamp.**.dto
+  typeAliasesPackage: com.blockshine.**.dto
 

@@ -174,9 +174,7 @@ dependencies {
 
 }
 
-apply from: 'desktop.gradle'
-
-mainClassName = 'com.ethercamp.harmony.Application'
+mainClassName = 'com.blockshine.api.Application'
 def defaultJvmArgs = ["-server",
                       "-Xss2M",
                       "-XX:+UseCompressedOops",
@@ -226,7 +224,7 @@ bootRepackage {
 }
 
 springBoot {
-    mainClass = "com.ethercamp.harmony.Application"
+    mainClass = "com.blockshine.api.Application"
 }
 
 test {
