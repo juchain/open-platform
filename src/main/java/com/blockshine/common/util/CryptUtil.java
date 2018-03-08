@@ -34,7 +34,7 @@ public class CryptUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(getSHA256Str("maxiaodong"));
+        System.out.println(getSHA256Str("76a2cb3debc265fadeedb44bccfbb74a"));
     }
 
 }
