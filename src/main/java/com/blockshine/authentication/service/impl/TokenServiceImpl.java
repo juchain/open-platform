@@ -51,7 +51,7 @@ public class TokenServiceImpl implements TokenService {
 
         JedisUtil.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
         JedisUtil.set(CodeConstant.REFRESH_TOKEN + dto.getAppKey(), refreshToken);
-        JedisUtil.set(token, dto.getAppKey());
+        JedisUtil.set(token, dto.getAppKey(), 720);
         JedisUtil.set(refreshToken, dto.getAppKey());
 
 
@@ -100,7 +100,7 @@ public class TokenServiceImpl implements TokenService {
         dto.setTokenType("grant");
 
         JedisUtil.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
-        JedisUtil.set(token, appKey);
+        JedisUtil.set(token, appKey, 720);
 
         return dto;
     }
