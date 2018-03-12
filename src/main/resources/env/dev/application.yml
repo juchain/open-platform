@@ -50,3 +50,11 @@ mybatis:
   mapper-locations: mybatis/*Mapper.xml
   typeAliasesPackage: com.blockshine.**.dto
 
+server:
+  port: 8080
+
+tomcat:
+  connector:
+    maxthreadstimecpus: 4
+    maxconnections: 500
+
