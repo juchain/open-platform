@@ -51,7 +51,7 @@ mybatis:
   typeAliasesPackage: com.blockshine.**.dto
 
 server:
-  port: 8080
+  port: 8090
 
 tomcat:
   connector:
