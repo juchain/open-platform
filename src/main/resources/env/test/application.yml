@@ -29,7 +29,7 @@ spring:
     #useGlobalDataSourceStat: true
 
   redis:
-    host: 47.100.174.228
+    host: redis-server
     port: 6379
     password:
     # 连接超时时间（毫秒）
@@ -51,7 +51,7 @@ mybatis:
   typeAliasesPackage: com.blockshine.**.dto
 
 server:
-  port: 8080
+  port: 8090
 
 tomcat:
   connector:
