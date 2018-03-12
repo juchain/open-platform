@@ -1,4 +1,8 @@
-
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'application'
+apply plugin: "com.github.johnrengelman.shadow"
 
 /**
  * Tasks:
@@ -35,11 +39,7 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'application'
-apply plugin: "com.github.johnrengelman.shadow"
+
 
 // check if -PuseMavenLocal is supplied
 if (project.hasProperty('useMavenLocal')) {
@@ -192,10 +192,6 @@ bootRun {
 
 bootRepackage {
     excludeDevtools = true
-}
-
-springBoot {
-    mainClass = "com.blockshine.api.Application"
 }
 
 test {
