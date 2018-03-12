@@ -302,6 +302,16 @@ jar{
     }
 }
 
+run{
+    doFirst {
+        copy {
+            from "build/resources/main/env/${env}"
+            into "build/resources/main"
+        }
+        delete("build/resources/main/env")
+    }
+}
+
 compileJava(){
     println("env:[${env}]")
     doLast {
