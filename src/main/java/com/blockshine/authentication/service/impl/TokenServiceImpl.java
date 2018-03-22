@@ -37,7 +37,6 @@ public class TokenServiceImpl implements TokenService {
             throw businessException;
         }
 
-
         validToken(dto);
 
         String token = AccessTokenUtil.generateToken(dto.getAppKey(), dto.getAppSecret());

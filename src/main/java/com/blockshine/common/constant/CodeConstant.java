@@ -56,6 +56,23 @@ public class CodeConstant {
     public static final int EXCEPTION_TOKEN = 4000103;
 
 
+    /**
+     * 底层链错误
+     */
+    public static final int CHAIN_ERROR = 5000001;
+
+    /**
+     * 底层链无数据返回
+     */
+    public static final int CHAIN_NODATA = 5000002;
+
+
+    /**
+     * 账户创建成功
+     */
+    public static final int ACCOUNT_CREATE = 6000001;
+
+
 
     public static final String TOKEN = "token:";
 

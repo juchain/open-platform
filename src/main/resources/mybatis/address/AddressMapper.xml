@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockshine.dao.AddressDao">
+
+	<select id="get" resultType="com.blockshine.domain.AddressDO">
+		select `id`,`created`,`updated`,`status`,`app_id`,`type`,`address_from`,`address_to` from app_address where id = #{value}
+	</select>
+
+	<select id="list" resultType="com.blockshine.domain.AddressDO">
+		select `id`,`created`,`updated`,`status`,`app_id`,`type`,`address_from`,`address_to` from app_address
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="created != null and created != ''"> and created = #{created} </if>
+		  		  <if test="updated != null and updated != ''"> and updated = #{updated} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="addressFrom != null and addressFrom != ''"> and address_from = #{addressFrom} </if>
+		  		  <if test="addressTo != null and addressTo != ''"> and address_to = #{addressTo} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from app_address
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="created != null and created != ''"> and created = #{created} </if>
+		  		  <if test="updated != null and updated != ''"> and updated = #{updated} </if>
+		  		  <if test="status != null and status != ''"> and status = #{status} </if>
+		  		  <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+		  		  <if test="type != null and type != ''"> and type = #{type} </if>
+		  		  <if test="addressFrom != null and addressFrom != ''"> and address_from = #{addressFrom} </if>
+		  		  <if test="addressTo != null and addressTo != ''"> and address_to = #{addressTo} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.blockshine.domain.AddressDO" useGeneratedKeys="true" keyProperty="id">
+		insert into app_address
+		(
+			`created`, 
+			`updated`, 
+			`status`, 
+			`app_id`, 
+			`type`, 
+			`address_from`,
+			`address_to`
+		)
+		values
+		(
+			#{created}, 
+			#{updated}, 
+			#{status}, 
+			#{appId}, 
+			#{type}, 
+			#{addressFrom},
+			#{addressTo}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.blockshine.domain.AddressDO">
+		update app_address 
+		<set>
+			<if test="created != null">`created` = #{created}, </if>
+			<if test="updated != null">`updated` = #{updated}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="appId != null">`app_id` = #{appId}, </if>
+			<if test="type != null">`type` = #{type}, </if>
+			<if test="addressFrom != null">`address_from` = #{addressFrom}, </if>
+			<if test="addressTo != null">`address_to` = #{addressTo}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from app_address where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from app_address where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

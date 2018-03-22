@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.blockshine.authentication.dao.ApplicationDao">
+
+
+
+    <select id="get" resultType="com.blockshine.system.domain.ApplicationDO">
+        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_ type`,`remark`,`app_store`,`android`,`web_site` from application where app_id = #{value}
+    </select>
+
+    <select id="list" resultType="com.blockshine.system.domain.ApplicationDO">
+        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_ type`,`remark`,`app_store`,`android`,`web_site` from application
+        <where>
+            <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+            <if test="created != null and created != ''"> and created = #{created} </if>
+            <if test="updated != null and updated != ''"> and updated = #{updated} </if>
+            <if test="status != null and status != ''"> and status = #{status} </if>
+            <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+            <if test="appName != null and appName != ''"> and app_name = #{appName} </if>
+            <if test="appType != null and appType != ''"> and app_type = #{appType} </if>
+            <if test="appStatus != null and appStatus != ''"> and app_status = #{appStatus} </if>
+            <if test="appKey != null and appKey != ''"> and app_key = #{appKey} </if>
+            <if test="appSecret != null and appSecret != ''"> and app_secret = #{appSecret} </if>
+            <if test="env type != null and env type != ''"> and env_ type = #{env type} </if>
+            <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+            <if test="appStore != null and appStore != ''"> and app_store = #{appStore} </if>
+            <if test="android != null and android != ''"> and android = #{android} </if>
+            <if test="webSite != null and webSite != ''"> and web_site = #{webSite} </if>
+        </where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+            <otherwise>
+                order by app_id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from application
+        <where>
+            <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
+            <if test="created != null and created != ''"> and created = #{created} </if>
+            <if test="updated != null and updated != ''"> and updated = #{updated} </if>
+            <if test="status != null and status != ''"> and status = #{status} </if>
+            <if test="userId != null and userId != ''"> and user_id = #{userId} </if>
+            <if test="appName != null and appName != ''"> and app_name = #{appName} </if>
+            <if test="appType != null and appType != ''"> and app_type = #{appType} </if>
+            <if test="appStatus != null and appStatus != ''"> and app_status = #{appStatus} </if>
+            <if test="appKey != null and appKey != ''"> and app_key = #{appKey} </if>
+            <if test="appSecret != null and appSecret != ''"> and app_secret = #{appSecret} </if>
+            <if test="env type != null and env type != ''"> and env_ type = #{env type} </if>
+            <if test="remark != null and remark != ''"> and remark = #{remark} </if>
+            <if test="appStore != null and appStore != ''"> and app_store = #{appStore} </if>
+            <if test="android != null and android != ''"> and android = #{android} </if>
+            <if test="webSite != null and webSite != ''"> and web_site = #{webSite} </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.blockshine.system.domain.ApplicationDO" useGeneratedKeys="true" keyProperty="appId">
+        insert into application
+        (
+        `created`,
+        `updated`,
+        `status`,
+        `user_id`,
+        `app_name`,
+        `app_type`,
+        `app_status`,
+        `app_key`,
+        `app_secret`,
+        `env_ type`,
+        `remark`,
+        `app_store`,
+        `android`,
+        `web_site`
+        )
+        values
+        (
+        #{created},
+        #{updated},
+        #{status},
+        #{userId},
+        #{appName},
+        #{appType},
+        #{appStatus},
+        #{appKey},
+        #{appSecret},
+        #{env type},
+        #{remark},
+        #{appStore},
+        #{android},
+        #{webSite}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.blockshine.system.domain.ApplicationDO">
+        update application
+        <set>
+            <if test="created != null">`created` = #{created}, </if>
+            <if test="updated != null">`updated` = #{updated}, </if>
+            <if test="status != null">`status` = #{status}, </if>
+            <if test="userId != null">`user_id` = #{userId}, </if>
+            <if test="appName != null">`app_name` = #{appName}, </if>
+            <if test="appType != null">`app_type` = #{appType}, </if>
+            <if test="appStatus != null">`app_status` = #{appStatus}, </if>
+            <if test="appKey != null">`app_key` = #{appKey}, </if>
+            <if test="appSecret != null">`app_secret` = #{appSecret}, </if>
+            <if test="env type != null">`env_ type` = #{env type}, </if>
+            <if test="remark != null">`remark` = #{remark}, </if>
+            <if test="appStore != null">`app_store` = #{appStore}, </if>
+            <if test="android != null">`android` = #{android}, </if>
+            <if test="webSite != null">`web_site` = #{webSite}</if>
+        </set>
+        where app_id = #{appId}
+    </update>
+
+    <delete id="remove">
+        delete from application where app_id = #{value}
+    </delete>
+
+    <delete id="batchRemove">
+        delete from application where app_id in
+        <foreach item="appId" collection="array" open="(" separator="," close=")">
+            #{appId}
+        </foreach>
+    </delete>
+
+	
+	<select id="getAuthentication" resultType="int"
+		parameterType="com.blockshine.authentication.dto.ApplicationDTO">
+		select count(app_id)
+		from application
+		where
+		app_key = #{appKey} and
+		app_secret = #{appSecret} and
+		status = 1;
+	</select>
+
+	<select id="findAppSecret" resultType="String" parameterType="String">
+		 select app_key as appKey
+		 from application
+		 where app_key = #{appKey}
+		 and status = 1
+	</select>
+
+</mapper>
