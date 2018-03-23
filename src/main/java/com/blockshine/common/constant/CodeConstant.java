@@ -78,4 +78,13 @@ public class CodeConstant {
 
     public static final String REFRESH_TOKEN = "token:refresh:";
 
+
+    public static interface CHAIN_TYPE{
+
+         int CHAIN_TYPE_PRIVATE = 1;
+
+         int CHAIN_TYPE_PUBLIC = 0;
+
+    }
+
 }

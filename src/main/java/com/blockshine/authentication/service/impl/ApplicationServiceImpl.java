@@ -11,6 +11,7 @@ import com.blockshine.common.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -71,18 +72,22 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     public R createApplication(ApplicationDO application) {
-        R r = blockShineWebCallService.bsw_newAddress(application);
 
-        if(!Integer.valueOf(0).equals(r.get("code"))){
-            return r;
-        }
+		R result= R.ok();
+		application.setCreated(new Date());
+		application.setStatus(1);
+		application.setUpdated(new Date());
 
         int save = applicationDao.save(application);
         if(save>0){
-            r.put("msg","应用创建成功");
-
+			result.put("msg","应用创建成功");
         }
-        return r;
+		R r = blockShineWebCallService.bsw_newAddress(application);
+
+		if(!Integer.valueOf(0).equals(r.get("code"))){
+			return r;
+		}
+        return result;
 
     }
 

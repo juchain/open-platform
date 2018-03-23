@@ -5,12 +5,12 @@
 
 
 
-    <select id="get" resultType="com.blockshine.system.domain.ApplicationDO">
-        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_ type`,`remark`,`app_store`,`android`,`web_site` from application where app_id = #{value}
+    <select id="get" resultType="com.blockshine.authentication.domain.ApplicationDO">
+        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_type`,`remark`,`app_store`,`android`,`web_site` from application where app_id = #{value}
     </select>
 
-    <select id="list" resultType="com.blockshine.system.domain.ApplicationDO">
-        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_ type`,`remark`,`app_store`,`android`,`web_site` from application
+    <select id="list" resultType="com.blockshine.authentication.domain.ApplicationDO">
+        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_type`,`remark`,`app_store`,`android`,`web_site` from application
         <where>
             <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
             <if test="created != null and created != ''"> and created = #{created} </if>
@@ -22,7 +22,7 @@
             <if test="appStatus != null and appStatus != ''"> and app_status = #{appStatus} </if>
             <if test="appKey != null and appKey != ''"> and app_key = #{appKey} </if>
             <if test="appSecret != null and appSecret != ''"> and app_secret = #{appSecret} </if>
-            <if test="env type != null and env type != ''"> and env_ type = #{env type} </if>
+            <if test="envType != null and envType != ''"> and env_type = #{envType} </if>
             <if test="remark != null and remark != ''"> and remark = #{remark} </if>
             <if test="appStore != null and appStore != ''"> and app_store = #{appStore} </if>
             <if test="android != null and android != ''"> and android = #{android} </if>
@@ -54,7 +54,7 @@
             <if test="appStatus != null and appStatus != ''"> and app_status = #{appStatus} </if>
             <if test="appKey != null and appKey != ''"> and app_key = #{appKey} </if>
             <if test="appSecret != null and appSecret != ''"> and app_secret = #{appSecret} </if>
-            <if test="env type != null and env type != ''"> and env_ type = #{env type} </if>
+            <if test="envType != null and envType != ''"> and env_type = #{envType} </if>
             <if test="remark != null and remark != ''"> and remark = #{remark} </if>
             <if test="appStore != null and appStore != ''"> and app_store = #{appStore} </if>
             <if test="android != null and android != ''"> and android = #{android} </if>
@@ -62,7 +62,7 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="com.blockshine.system.domain.ApplicationDO" useGeneratedKeys="true" keyProperty="appId">
+    <insert id="save" parameterType="com.blockshine.authentication.domain.ApplicationDO" useGeneratedKeys="true" keyProperty="appId">
         insert into application
         (
         `created`,
@@ -74,7 +74,7 @@
         `app_status`,
         `app_key`,
         `app_secret`,
-        `env_ type`,
+        `env_type`,
         `remark`,
         `app_store`,
         `android`,
@@ -91,7 +91,7 @@
         #{appStatus},
         #{appKey},
         #{appSecret},
-        #{env type},
+        #{envType},
         #{remark},
         #{appStore},
         #{android},
@@ -99,7 +99,7 @@
         )
     </insert>
 
-    <update id="update" parameterType="com.blockshine.system.domain.ApplicationDO">
+    <update id="update" parameterType="com.blockshine.authentication.domain.ApplicationDO">
         update application
         <set>
             <if test="created != null">`created` = #{created}, </if>
@@ -111,7 +111,7 @@
             <if test="appStatus != null">`app_status` = #{appStatus}, </if>
             <if test="appKey != null">`app_key` = #{appKey}, </if>
             <if test="appSecret != null">`app_secret` = #{appSecret}, </if>
-            <if test="env type != null">`env_ type` = #{env type}, </if>
+            <if test="envType != null">`env_type` = #{envType}, </if>
             <if test="remark != null">`remark` = #{remark}, </if>
             <if test="appStore != null">`app_store` = #{appStore}, </if>
             <if test="android != null">`android` = #{android}, </if>

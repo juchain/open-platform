@@ -62,7 +62,8 @@ public class ApplicationController {
 	 */
 	@ResponseBody
 	@PostMapping("/save")
-	public R save(ApplicationDO application){
+	public R save(@RequestBody ApplicationDO application){
+
 		return applicationService.createApplication(application);
 	}
 	/**
@@ -70,7 +71,7 @@ public class ApplicationController {
 	 */
 	@ResponseBody
 	@RequestMapping("/update")
-	public R update( ApplicationDO application){
+	public R update(@RequestBody ApplicationDO application){
 		applicationService.update(application);
 		return R.ok();
 	}

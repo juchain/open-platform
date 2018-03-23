@@ -1,7 +1,8 @@
 package com.blockshine.authentication.service.impl;
 
 import com.blockshine.authentication.dao.AddressDao;
-import com.blockshine.authentication.dto.AddressDO;
+import com.blockshine.authentication.domain.AddressDO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

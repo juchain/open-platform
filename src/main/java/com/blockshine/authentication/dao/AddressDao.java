@@ -1,6 +1,7 @@
 package com.blockshine.authentication.dao;
 
-import com.blockshine.authentication.dto.AddressDO;
+import com.blockshine.authentication.domain.AddressDO;
+
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
