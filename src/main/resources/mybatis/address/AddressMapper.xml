@@ -8,7 +8,7 @@
 	</select>
 
 	<select id="list" resultType="com.blockshine.authentication.domain.AddressDO">
-		select `id`,`created`,`updated`,`status`,`app_id`,`type`,`address_from`,`address_to` from app_address
+		select `id`,`created`,`updated`,`status`,`app_id`,`type`,`address_from`,`address_to`,password,app_key from app_address
         <where>  
 		  		  <if test="id != null and id != ''"> and id = #{id} </if>
 		  		  <if test="created != null and created != ''"> and created = #{created} </if>

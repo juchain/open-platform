@@ -1,6 +1,6 @@
 package com.blockshine.authentication.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+
 import com.blockshine.authentication.dao.ApplicationDao;
 import com.blockshine.authentication.domain.ApplicationDO;
 import com.blockshine.authentication.dto.ApplicationDTO;
@@ -11,6 +11,7 @@ import com.blockshine.common.util.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -71,24 +72,38 @@ public class ApplicationServiceImpl implements ApplicationService {
 	}
 
     @Override
+	@Transactional
     public R createApplication(ApplicationDO application) {
 
-		R result= R.ok();
 		application.setCreated(new Date());
 		application.setStatus(1);
 		application.setUpdated(new Date());
 
-        int save = applicationDao.save(application);
-        if(save>0){
-			result.put("msg","应用创建成功");
-        }
-		R r = blockShineWebCallService.bsw_newAddress(application);
-
-		if(!Integer.valueOf(0).equals(r.get("code"))){
-			return r;
+		int save = applicationDao.save(application);
+		R r = R.ok();
+		if(save>0){
+			r = blockShineWebCallService.bsw_newAddress(application);
+			if(Integer.valueOf(0).equals(r.get("code"))){
+				r.put("msg","应用创建成功");
+			}
+		}else{
+			r.put("msg","应用创建失败");
 		}
-        return result;
+		return r;
+
+
+
+
+
+
+
+
 
     }
 
+
+
+
 }
+
+

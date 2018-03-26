@@ -28,12 +28,12 @@ import org.springframework.boot.context.embedded.tomcat.TomcatConnectorCustomize
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
-
-
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @SpringBootApplication
 @EnableScheduling
+@EnableTransactionManagement
 public class Application {
 
     //4 core + 8 giga-bytes configuration

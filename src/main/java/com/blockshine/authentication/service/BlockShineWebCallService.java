@@ -17,11 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
-
 public class BlockShineWebCallService {
 
 
@@ -34,26 +36,34 @@ public class BlockShineWebCallService {
 	private String bswurl;
 
 	// 创建账户
+    @Transactional
 	public R bsw_newAddress(ApplicationDO applicationDO)  {
-	    JSONObject jsonObject =new JSONObject();
-        jsonObject.put("appKey",applicationDO.getAppKey());
-
+        Map map  =new HashMap();
+        map.put("appKey",applicationDO.getAppKey());
         String password = "";
-
         try {
-            password = Base64Utils.decode(MD5Utils.encrypt(applicationDO.getAppKey()));
+            password = MD5Utils.encrypt(applicationDO.getAppKey());
         } catch (Exception e) {
             e.printStackTrace();
             logger.error("密码生成失败",e);
         }
+        map.put("password",password);
 
-        jsonObject.put("password",password);
 
-		JSONObject jo = HttpClientUtils.httpPost(bswurl + "account/init",jsonObject);
+        String params = JSONObject.toJSONString(map);
+        String url =bswurl+"account/init";
+        logger.info("url:"+url+"======params:"+params);
 
-		R r =R.ok();
+        JSONObject jo = null;
+        try {
+            jo = HttpClientUtils.httpPostJsonStr(bswurl + "account/init",params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        if("0".equals(jo.get("code"))){
+        R r =R.ok();
+
+        if(jo!=null &"0".equals(jo.get("code"))){
             AddressDO addressDo = new AddressDO();
             addressDo.setAddressFrom((String)jo.get("from"));
             addressDo.setAddressTo((String)jo.get("from"));
@@ -62,6 +72,7 @@ public class BlockShineWebCallService {
             addressDo.setAppKey(applicationDO.getAppKey());
             addressDo.setPassword(password);
             addressDo.setType(CodeConstant.CHAIN_TYPE.CHAIN_TYPE_PRIVATE);
+            addressDo.setStatus(1);
             addressService.save(addressDo);
             r.put("code", 0);
             r.put("msg", "账户创建成功");
