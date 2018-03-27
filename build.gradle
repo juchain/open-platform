@@ -152,7 +152,7 @@ def defaultJvmArgs = ["-server",
                       "-XX:+HeapDumpOnOutOfMemoryError",
                       "-XX:-OmitStackTraceInFastThrow"]
 
-applicationDefaultJvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"]
+applicationDefaultJvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"]
 
 
 task wrapper(type: Wrapper) {
