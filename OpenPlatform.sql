@@ -1,3 +1,8 @@
+
+create database open_platform;
+
+use open_platform;
+
 -- ----------------------------
 
 -- Table structure for `bcuser`
@@ -8,21 +13,21 @@ DROP TABLE IF EXISTS `bcuser`;
 
 CREATE TABLE `bcuser` (
 
-  `user_id` bigint(20) NOT NULL AUTO_INCREMENT,
+`user_id` bigint(20) NOT NULL AUTO_INCREMENT,
 
-  `created` datetime default current_timestamp COMMENT '创建时间',
+`created` datetime default current_timestamp COMMENT '创建时间',
 
-  `updated` datetime default current_timestamp COMMENT '修改时间',
+`updated` datetime default current_timestamp COMMENT '修改时间',
 
-  `status` tinyint(255) DEFAULT 1 COMMENT '状态 0:禁用，1:正常',
+`status` tinyint(255) DEFAULT 1 COMMENT '状态 0:禁用，1:正常',
 
-  `mobile` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '手机',
+`mobile` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '手机',
 
-  `password` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '密码',
+`password` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '密码',
 
-  `salt` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '盐',
+`salt` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '盐',
 
-  PRIMARY KEY (`user_id`)
+PRIMARY KEY (`user_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -38,27 +43,27 @@ DROP TABLE IF EXISTS `application`;
 
 CREATE TABLE `application` (
 
-  `app_id` bigint(20) NOT NULL AUTO_INCREMENT,
+`app_id` bigint(20) NOT NULL AUTO_INCREMENT,
 
-  `created` datetime default current_timestamp COMMENT '创建时间',
+`created` datetime default current_timestamp COMMENT '创建时间',
 
-  `updated` datetime default current_timestamp COMMENT '修改时间',
+`updated` datetime default current_timestamp COMMENT '修改时间',
 
-  `status` tinyint(255) DEFAULT 1 COMMENT '状态 0:禁用，1:正常',
+`status` tinyint(255) DEFAULT 1 COMMENT '状态 0:禁用，1:正常',
 
-  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+`user_id` bigint(20) NOT NULL COMMENT '用户id',
 
-  `app_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用名称',
+`app_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用名称',
 
-  `app_type` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用类型',
+`app_type` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用类型',
 
-  `app_status` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用状态',
+`app_status` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用状态',
 
-  `app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用key  唯一性',
+`app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用key 唯一性',
 
-  `app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用秘钥  唯一性',
+`app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用秘钥 唯一性',
 
-  PRIMARY KEY (`app_id`)
+PRIMARY KEY (`app_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -93,3 +98,125 @@ INSERT INTO `application` VALUES (2, NOW(), NOW(),1,2,'征信','A','A','12','EFG
 INSERT INTO `application` VALUES (3, NOW(), NOW(),1,3,'监管','A','A','13','ASDF');
 
 -- test 脚本 end------------------------------
+
+
+
+
+
+
+
+
+
+
+
+SET NAMES utf8;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+
+-- Table structure for `app_address`
+
+-- ----------------------------
+
+DROP TABLE IF EXISTS `app_address`;
+
+CREATE TABLE `app_address` (
+
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+
+`created` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+
+`updated` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+
+`status` tinyint(255) DEFAULT '1' COMMENT '状态 0:禁用，1:正常',
+
+`app_id` bigint(20) NOT NULL COMMENT '应用id',
+
+`type` int(2) DEFAULT '1' COMMENT '链类型0-共有链 1-私有链',
+
+`address_from` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '转出地址',
+
+`address_to` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '转入地址',
+
+`app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '用户appkey',
+
+`password` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '地址密码',
+
+PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+
+
+
+
+
+
+/*
+
+Navicat Premium Data Transfer
+
+Source Server : open_platform
+
+Source Server Type : MySQL
+
+Source Server Version : 50720
+
+Source Host : 47.100.175.16
+
+Source Database : open_platform
+
+Target Server Type : MySQL
+
+Target Server Version : 50720
+
+File Encoding : utf-8
+
+Date: 03/27/2018 16:10:47 PM
+
+*/
+
+SET NAMES utf8;
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+
+-- Table structure for `data_chain`
+
+-- ----------------------------
+
+DROP TABLE IF EXISTS `data_chain`;
+
+CREATE TABLE `data_chain` (
+
+`id` bigint(20) NOT NULL AUTO_INCREMENT,
+
+`created` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+
+`updated` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+
+`status` tinyint(255) DEFAULT '1' COMMENT '状态 0:禁用，1:正常',
+
+`nonce` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT 'nonce',
+
+`address_from` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '转出地址',
+
+`address_to` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '转入地址',
+
+`data` text COLLATE utf8_bin COMMENT '上链数据',
+
+`receipt` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '上链返回数据',
+
+`data_status` tinyint(3) DEFAULT '1' COMMENT '状态 1:penging 2:sucess 3:falied',
+
+`message` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '接口返回信息',
+
+PRIMARY KEY (`id`)
+
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+SET FOREIGN_KEY_CHECKS = 1;
