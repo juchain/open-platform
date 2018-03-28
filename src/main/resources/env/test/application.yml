@@ -29,7 +29,7 @@ spring:
     #useGlobalDataSourceStat: true
 
   redis:
-    host: redis-server
+    host: 47.100.174.228
     port: 6379
     password:
     # 连接超时时间（毫秒）
@@ -47,14 +47,5 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: mybatis/*Mapper.xml
+  mapper-locations: mybatis/*/*Mapper.xml
   typeAliasesPackage: com.blockshine.**.dto
-
-server:
-  port: 8090
-
-tomcat:
-  connector:
-    maxthreadstimecpus: 4
-    maxconnections: 500
-
