@@ -66,7 +66,7 @@ public class BlockShineWebCallService {
         if(jo!=null &"0".equals(jo.get("code"))){
             AddressDO addressDo = new AddressDO();
             addressDo.setAddressFrom((String)jo.get("from"));
-            addressDo.setAddressTo((String)jo.get("from"));
+            addressDo.setAddressTo((String)jo.get("to"));
             addressDo.setCreated(new Date());
             addressDo.setAppId(applicationDO.getAppId());
             addressDo.setAppKey(applicationDO.getAppKey());
@@ -87,4 +87,18 @@ public class BlockShineWebCallService {
 
 
 
+    public JSONObject accountInit(Map<String, Object> params) {
+        String paramsString = JSONObject.toJSONString(params);
+        String url =bswurl+"account/init";
+        logger.info("url:"+url+"======params:"+paramsString);
+        JSONObject jo = null;
+        try {
+            jo = HttpClientUtils.httpPostJsonStr(bswurl + "account/init",paramsString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return jo;
+
+    }
 }

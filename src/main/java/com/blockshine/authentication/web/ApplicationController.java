@@ -36,14 +36,17 @@ public class ApplicationController {
 	
 	@ResponseBody
 	@GetMapping("/list")
-	public PageUtils list(@RequestParam Map<String, Object> params){
+	public R list(@RequestParam Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 		List<ApplicationDO> applicationList = applicationService.list(query);
 		int total = applicationService.count(query);
 		PageUtils pageUtils = new PageUtils(applicationList, total);
-		return pageUtils;
+		R r =R.ok();
+		r.put("data",pageUtils);
+		return r;
 	}
+
 	
 	@GetMapping("/add")
 	String add(){
@@ -97,5 +100,8 @@ public class ApplicationController {
 		applicationService.batchRemove(appIds);
 		return R.ok();
 	}
+
+
+
 	
 }
