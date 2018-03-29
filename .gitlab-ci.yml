@@ -1,18 +1,15 @@
 before_script:
   - docker info
+  - kubectl get no
 
-build test jar:
+deploy:
+    variables:
+    REGISTRY: 'gitlab.blockshine.net:4567'
+    LIBRARY: 'webplatform/open-platform'
   script:
-    - gradle clean build -Denv=test
-    - docker build -t gitlab.blockshine.net:4567/webplatform/open-platform:test .
-    - docker push gitlab.blockshine.net:4567/webplatform/open-platform:test
+    - gradle clean build -Denv=$CI_COMMIT_REF_NAME
+    - docker build -t -t $REGISTRY/$LIBRARY:$CI_COMMIT_SHA .
+    - docker push -t $REGISTRY/$LIBRARY:$CI_COMMIT_SHA
+    - kubectl set image deployment/open-platform open-platform=$REGISTRY/$LIBRARY:$CI_COMMIT_SHA -n $CI_COMMIT_REF_NAME
   only:
     - test
-
-build prd jar:
-  script:
-    - gradle clean build -Denv=prd
-    - docker build -t gitlab.blockshine.net:4567/webplatform/open-platform:latest .
-    - docker push gitlab.blockshine.net:4567/webplatform/open-platform:latest
-  only:
-    - master
