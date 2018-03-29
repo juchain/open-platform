@@ -4,8 +4,8 @@ before_script:
 
 deploy:
     variables:
-    REGISTRY: 'gitlab.blockshine.net:4567'
-    LIBRARY: 'webplatform/open-platform'
+      REGISTRY: 'gitlab.blockshine.net:4567'
+      LIBRARY: 'webplatform/open-platform'
   script:
     - gradle clean build -Denv=$CI_COMMIT_REF_NAME
     - docker build -t -t $REGISTRY/$LIBRARY:$CI_COMMIT_SHA .
