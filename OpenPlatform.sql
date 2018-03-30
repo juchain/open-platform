@@ -42,31 +42,26 @@ PRIMARY KEY (`user_id`)
 DROP TABLE IF EXISTS `application`;
 
 CREATE TABLE `application` (
-
-`app_id` bigint(20) NOT NULL AUTO_INCREMENT,
-
-`created` datetime default current_timestamp COMMENT '创建时间',
-
-`updated` datetime default current_timestamp COMMENT '修改时间',
-
-`status` tinyint(255) DEFAULT 1 COMMENT '状态 0:禁用，1:正常',
-
-`user_id` bigint(20) NOT NULL COMMENT '用户id',
-
-`app_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用名称',
-
-`app_type` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用类型',
-
-`app_status` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用状态',
-
-`app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用key 唯一性',
-
-`app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL unique COMMENT '应用秘钥 唯一性',
-
-PRIMARY KEY (`app_id`)
-
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `app_id` varchar(255) NOT NULL COMMENT '应用唯一识别码' ,
+  `created` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `status` tinyint(255) DEFAULT '1' COMMENT '状态 0:禁用，1:正常',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `app_name` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用名称',
+  `app_type` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用类型',
+  `app_status` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用状态',
+  `app_key` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用key',
+  `app_secret` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用秘钥',
+  `env_type` tinyint(4) DEFAULT '1' COMMENT '1-dev 2-test 3-pre 4-pro',
+  `remark` varchar(255) COLLATE utf8_bin DEFAULT NULL COMMENT '应用描述',
+  `app_store` tinyint(2) DEFAULT '1' COMMENT '0-无 1-有  appstore 有无应用',
+  `android` tinyint(2) DEFAULT '1' COMMENT '0 -无 1-有',
+  `web_site` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `app_key` (`app_key`),
+  UNIQUE KEY `app_secret` (`app_secret`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_bin
 
 
 -- test 脚本 start----------------------------
