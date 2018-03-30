@@ -1,0 +1,17 @@
+package com.blockshine.authentication.web;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HSController {
+
+	@ResponseBody
+	@RequestMapping(value = "/hs", method = RequestMethod.GET)
+	public String hs() {
+		return "hs";
+	}
+
+}

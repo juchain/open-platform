@@ -1,10 +1,8 @@
 package com.blockshine.common.util;
 
-
 import javax.servlet.http.HttpServletRequest;
 
 public class IPUtils {
-
 	/**
 	 * 获取IP地址
 	 * 

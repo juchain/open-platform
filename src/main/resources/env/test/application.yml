@@ -49,4 +49,3 @@ mybatis:
     map-underscore-to-camel-case: true
   mapper-locations: mybatis/*/*Mapper.xml
   typeAliasesPackage: com.blockshine.**.dto
-
