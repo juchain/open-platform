@@ -6,12 +6,13 @@
 
 
     <select id="get" resultType="com.blockshine.authentication.domain.ApplicationDO">
-        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_type`,`remark`,`app_store`,`android`,`web_site` from application where app_id = #{value}
+        select `id`,`app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_type`,`remark`,`app_store`,`android`,`web_site` from application where `id` = #{value}
     </select>
 
     <select id="list" resultType="com.blockshine.authentication.domain.ApplicationDO">
-        select `app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_type`,`remark`,`app_store`,`android`,`web_site` from application
+        select `id`,`app_id`,`created`,`updated`,`status`,`user_id`,`app_name`,`app_type`,`app_status`,`app_key`,`app_secret`,`env_type`,`remark`,`app_store`,`android`,`web_site` from application
         <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
             <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
             <if test="created != null and created != ''"> and created = #{created} </if>
             <if test="updated != null and updated != ''"> and updated = #{updated} </if>
@@ -33,7 +34,7 @@
                 order by ${sort} ${order}
             </when>
             <otherwise>
-                order by app_id desc
+                order by `id` desc
             </otherwise>
         </choose>
         <if test="offset != null and limit != null">
@@ -44,6 +45,7 @@
     <select id="count" resultType="int">
         select count(*) from application
         <where>
+            <if test="id != null and id != ''"> and id = #{id} </if>
             <if test="appId != null and appId != ''"> and app_id = #{appId} </if>
             <if test="created != null and created != ''"> and created = #{created} </if>
             <if test="updated != null and updated != ''"> and updated = #{updated} </if>
@@ -62,9 +64,10 @@
         </where>
     </select>
 
-    <insert id="save" parameterType="com.blockshine.authentication.domain.ApplicationDO" useGeneratedKeys="true" keyProperty="appId">
+    <insert id="save" parameterType="com.blockshine.authentication.domain.ApplicationDO" useGeneratedKeys="true" keyProperty="id">
         insert into application
         (
+        `app_id`,
         `created`,
         `updated`,
         `status`,
@@ -82,6 +85,7 @@
         )
         values
         (
+        #{appId},
         #{created},
         #{updated},
         #{status},
@@ -102,6 +106,7 @@
     <update id="update" parameterType="com.blockshine.authentication.domain.ApplicationDO">
         update application
         <set>
+            <if test="appId != null">`app_id` = #{appId}, </if>
             <if test="created != null">`created` = #{created}, </if>
             <if test="updated != null">`updated` = #{updated}, </if>
             <if test="status != null">`status` = #{status}, </if>
@@ -121,20 +126,20 @@
     </update>
 
     <delete id="remove">
-        delete from application where app_id = #{value}
+        delete from application where id = #{value}
     </delete>
 
     <delete id="batchRemove">
-        delete from application where app_id in
-        <foreach item="appId" collection="array" open="(" separator="," close=")">
-            #{appId}
+        delete from application where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
         </foreach>
     </delete>
 
-	
-	<select id="getAuthentication" resultType="int"
-		parameterType="com.blockshine.authentication.dto.ApplicationDTO">
-		select count(app_id)
+
+    <select id="getAuthentication" resultType="int"
+            parameterType="com.blockshine.authentication.dto.ApplicationDTO">
+		select count(id)
 		from application
 		where
 		app_key = #{appKey} and
@@ -142,7 +147,7 @@
 		status = 1;
 	</select>
 
-	<select id="findAppSecret" resultType="String" parameterType="String">
+    <select id="findAppSecret" resultType="String" parameterType="String">
 		 select app_key as appKey
 		 from application
 		 where app_key = #{appKey}
