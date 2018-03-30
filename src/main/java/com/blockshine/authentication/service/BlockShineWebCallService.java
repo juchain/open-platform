@@ -34,7 +34,7 @@ public class BlockShineWebCallService {
 	// 创建账户
     @Transactional
 	public R bsw_newAddress(ApplicationDO applicationDO)  {
-        Map<String,String> map  =new HashMap<String,String>();
+        Map<String,Object> map  =new HashMap<String,Object>();
         map.put("appKey",applicationDO.getAppKey());
         String password = "";
         try {
@@ -62,7 +62,7 @@ public class BlockShineWebCallService {
         if(jo!=null &"0".equals(jo.get("code"))){
             AddressDO addressDo = new AddressDO();
             addressDo.setAddressFrom((String)jo.get("from"));
-            addressDo.setAddressTo((String)jo.get("from"));
+            addressDo.setAddressTo((String)jo.get("to"));
             addressDo.setCreated(new Date());
             addressDo.setAppId(applicationDO.getAppId());
             addressDo.setAppKey(applicationDO.getAppKey());
@@ -83,4 +83,18 @@ public class BlockShineWebCallService {
 
 
 
+    public JSONObject accountInit(Map<String, Object> params) {
+        String paramsString = JSONObject.toJSONString(params);
+        String url =bswurl+"account/init";
+        logger.info("url:"+url+"======params:"+paramsString);
+        JSONObject jo = null;
+        try {
+            jo = HttpClientUtils.httpPostJsonStr(bswurl + "account/init",paramsString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return jo;
+
+    }
 }

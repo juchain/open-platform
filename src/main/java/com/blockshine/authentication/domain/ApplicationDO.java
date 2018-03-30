@@ -15,7 +15,8 @@ public class ApplicationDO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	//
-	private Long appId;
+	private String appId;
+	private String id;
 	//创建时间
 	private Date created;
 	//修改时间
@@ -46,18 +47,6 @@ public class ApplicationDO implements Serializable {
 	private String webSite;
 
 	/**
-	 * 设置：
-	 */
-	public void setAppId(Long appId) {
-		this.appId = appId;
-	}
-	/**
-	 * 获取：
-	 */
-	public Long getAppId() {
-		return appId;
-	}
-	/**
 	 * 设置：创建时间
 	 */
 	public void setCreated(Date created) {
@@ -69,6 +58,23 @@ public class ApplicationDO implements Serializable {
 	public Date getCreated() {
 		return created;
 	}
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	/**
 	 * 设置：修改时间
 	 */
