@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CodeConstant {
 
-    private static ConcurrentHashMap<String, String> codeMap = new ConcurrentHashMap();
+    private static ConcurrentHashMap<String, String> codeMap = new ConcurrentHashMap<String, String>();
 
     static {
         codeMap.put("success", "success");

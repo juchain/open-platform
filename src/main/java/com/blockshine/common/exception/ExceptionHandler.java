@@ -1,7 +1,6 @@
 package com.blockshine.common.exception;
 
 
-import com.blockshine.common.util.BDException;
 import com.blockshine.common.util.R;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

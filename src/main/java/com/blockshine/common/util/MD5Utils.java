@@ -28,7 +28,8 @@ public class MD5Utils {
 
 	}
 
-    private static String generateSalt(){
+    @SuppressWarnings("unused")
+	private static String generateSalt(){
         String chars = "abcdefghijklmnopqrstuvwxyz0123456789";
         StringBuffer salt = new StringBuffer();
         for (int i = 0; i < 7; i++) {

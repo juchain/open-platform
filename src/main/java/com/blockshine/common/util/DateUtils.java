@@ -1,7 +1,5 @@
 package com.blockshine.common.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,7 +8,6 @@ import java.util.Date;
  * 日期处理
  */
 public class DateUtils {
-    private final static Logger logger = LoggerFactory.getLogger(DateUtils.class);
     /**
      * 时间格式(yyyy-MM-dd)
      */

@@ -4,21 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 
 import com.blockshine.authentication.domain.AddressDO;
 import com.blockshine.authentication.domain.ApplicationDO;
-import com.blockshine.authentication.dto.AccountDTO;
 import com.blockshine.authentication.service.impl.AddressServiceImpl;
 import com.blockshine.authentication.util.HttpClientUtils;
 import com.blockshine.common.constant.CodeConstant;
-import com.blockshine.common.util.Base64Utils;
 import com.blockshine.common.util.MD5Utils;
 import com.blockshine.common.util.R;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +34,7 @@ public class BlockShineWebCallService {
 	// 创建账户
     @Transactional
 	public R bsw_newAddress(ApplicationDO applicationDO)  {
-        Map map  =new HashMap();
+        Map<String,Object> map  =new HashMap<String,Object>();
         map.put("appKey",applicationDO.getAppKey());
         String password = "";
         try {

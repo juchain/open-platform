@@ -29,7 +29,7 @@ public class ImageUtils {
      */
     public static BufferedImage cutImage(MultipartFile file, int x, int y, int w, int h, String prefix) {
 
-        Iterator iterator = ImageIO.getImageReadersByFormatName(prefix);
+        Iterator<ImageReader> iterator = ImageIO.getImageReadersByFormatName(prefix);
         try {
             ImageReader reader = (ImageReader)iterator.next();
             //转换成输入流

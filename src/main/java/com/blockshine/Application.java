@@ -44,11 +44,12 @@ public class Application {
     private int maxConnections = 800;
 
     @Bean
+    @SuppressWarnings("unchecked")
     public EmbeddedServletContainerFactory embeddedServletContainerFactory() {
         TomcatEmbeddedServletContainerFactory tomcatEmbeddedServletContainerFactory = new TomcatEmbeddedServletContainerFactory();
         tomcatEmbeddedServletContainerFactory.setProtocol("org.apache.coyote.http11.Http11Nio2Protocol");
         tomcatEmbeddedServletContainerFactory.addConnectorCustomizers((TomcatConnectorCustomizer) connector -> {
-            AbstractHttp11JsseProtocol<Nio2Channel> handler = (AbstractHttp11JsseProtocol)connector.getProtocolHandler();
+			AbstractHttp11JsseProtocol<Nio2Channel> handler = (AbstractHttp11JsseProtocol<Nio2Channel>)connector.getProtocolHandler();
             handler.setMaxThreads(Runtime.getRuntime().availableProcessors() * maxThreads);
             handler.setMaxConnections(maxConnections);
         });
