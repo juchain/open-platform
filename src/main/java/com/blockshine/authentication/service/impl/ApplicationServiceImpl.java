@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -78,6 +79,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 		application.setCreated(new Date());
 		application.setStatus(1);
 		application.setUpdated(new Date());
+		application.setAppId(UUID.randomUUID().toString().replace("-",""));
 
 		int save = applicationDao.save(application);
 		R r = R.ok();
