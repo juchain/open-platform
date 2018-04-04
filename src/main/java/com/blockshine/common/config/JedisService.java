@@ -13,14 +13,11 @@ import java.util.Set;
 @Component()
 public class JedisService implements ApplicationContextAware {
 
-      ApplicationContext applicationContext = null;
+    ApplicationContext applicationContext = null;
 
-     public static JedisPool jedisPool=  null;
+    public static JedisPool jedisPool=  null;
 
-
-     private static Logger logger = Logger.getLogger(JedisService.class);
-
-
+    private static Logger logger = Logger.getLogger(JedisService.class);
 
     public JedisService(){
 
