@@ -64,7 +64,14 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  boolean hasKey(String key){
-        return getJedis().exists(key);
+        Jedis jedis = getJedis();
+        try {
+            return jedis.exists(key);
+        }finally {
+            returnJedis(jedis);
+        }
+
+
     }
 
     /**
@@ -74,8 +81,13 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  String set(String key,String value){
-        String result =  getJedis().set(key,value);
-        return result;
+
+        try {
+            return  getJedis().set(key,value);
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
 
     /**
@@ -86,8 +98,18 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  String set(String key,String value,int timeOut){
-        return getJedis().setex(key,timeOut,value);
+
+        try {
+            return getJedis().setex(key,timeOut,value);
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
+
+
+
+
 
 
     /**
@@ -99,7 +121,13 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  String setex(String key,String value,int timeOut){
-        return getJedis().setex(key.getBytes(),timeOut,value.getBytes());
+
+        try {
+            return getJedis().setex(key.getBytes(),timeOut,value.getBytes());
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
 
 
@@ -109,7 +137,13 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  byte[] getex(String key){
-        return getJedis().get(key.getBytes());
+        try {
+            return getJedis().get(key.getBytes());
+        }finally {
+            returnJedis(jedis);
+        }
+
+
     }
 
     /**
@@ -118,7 +152,13 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  String getByKey(String key){
-        return getJedis().get(key);
+
+        try {
+            return getJedis().get(key);
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
 
     /**
@@ -127,7 +167,13 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  Set<String> getKesByPattern(String pattern){
-        return getJedis().keys(pattern);
+
+        try {
+            return getJedis().keys(pattern);
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
 
     /**
@@ -135,7 +181,13 @@ public class JedisService implements ApplicationContextAware {
      * @param key
      */
     public  void delByKey(String key){
-        getJedis().del(key);
+
+        try {
+            getJedis().del(key);
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
 
     /**
@@ -144,14 +196,28 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  long getTimeOutByKey(String key){
-        return getJedis().ttl(key);
+
+        try {
+            return getJedis().ttl(key);
+        }finally {
+            returnJedis(jedis);
+        }
+
     }
 
     /**
      * 清空数据 【慎用啊！】
      */
     public  void flushDB(){
-        getJedis().flushDB();
+
+        try {
+            getJedis().flushDB();
+        }finally {
+            returnJedis(jedis);
+        }
+
+
+
     }
 
     /**
@@ -161,6 +227,25 @@ public class JedisService implements ApplicationContextAware {
      * @return
      */
     public  long refreshLiveTime(String key,int timeOut){
-        return getJedis().expire(key,timeOut);
+
+        try {
+            return getJedis().expire(key,timeOut);
+        }finally {
+            returnJedis(jedis);
+        }
+
+
+    }
+
+
+
+    /**
+     * 回收jedis(放到finally中)
+     * @param jedis
+     */
+    public void returnJedis(Jedis jedis) {
+        if (null != jedis && null != jedisPool) {
+            jedisPool.returnResource(jedis);
+        }
     }
 }

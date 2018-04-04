@@ -4,9 +4,10 @@ import com.blockshine.authentication.dto.ApplicationDTO;
 import com.blockshine.authentication.dto.AuthorizationDTO;
 import com.blockshine.authentication.service.TokenService;
 import com.blockshine.authentication.util.AccessTokenUtil;
+import com.blockshine.common.config.JedisService;
 import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.constant.CodeConstant;
-import com.blockshine.common.util.JedisUtil;
+
 
 import com.blockshine.authentication.dao.ApplicationDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ public class TokenServiceImpl implements TokenService {
 	
 	@Autowired
     ApplicationDao applicationDao;
+	@Autowired
+    JedisService jedisService;
 
     @Override
     public AuthorizationDTO generateToken(AuthorizationDTO dto) {
@@ -48,10 +51,10 @@ public class TokenServiceImpl implements TokenService {
         dto.setScope("all");
         dto.setTokenType("grant");
 
-        JedisUtil.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
-        JedisUtil.set(CodeConstant.REFRESH_TOKEN + dto.getAppKey(), refreshToken);
-        JedisUtil.set(token, dto.getAppKey(), 720);
-        JedisUtil.set(refreshToken, dto.getAppKey());
+        jedisService.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
+        jedisService.set(CodeConstant.REFRESH_TOKEN + dto.getAppKey(), refreshToken);
+        jedisService.set(token, dto.getAppKey(), 720);
+        jedisService.set(refreshToken, dto.getAppKey());
 
 
         return dto;
@@ -65,7 +68,7 @@ public class TokenServiceImpl implements TokenService {
      */
     private void validToken(AuthorizationDTO dto) {
         BusinessException businessException;
-        if(JedisUtil.hasKey(CodeConstant.TOKEN + dto.getAppKey())){
+        if(jedisService.hasKey(CodeConstant.TOKEN + dto.getAppKey())){
             businessException =
                     new BusinessException("token exists!", CodeConstant.SERVICE_REFUSED);
 
@@ -77,14 +80,14 @@ public class TokenServiceImpl implements TokenService {
     public AuthorizationDTO refreshToken(AuthorizationDTO dto) {
         BusinessException businessException = null;
 
-        if(!JedisUtil.hasKey(dto.getRefreshToken())){
+        if(!jedisService.hasKey(dto.getRefreshToken())){
             businessException =
                     new BusinessException("refreshToken not exist!", CodeConstant.SERVICE_REFUSED);
 
             throw businessException;
         }
 
-        String appKey = JedisUtil.getByKey(dto.getRefreshToken());
+        String appKey = jedisService.getByKey(dto.getRefreshToken());
 
         dto.setAppKey(appKey);
         validToken(dto);
@@ -98,8 +101,8 @@ public class TokenServiceImpl implements TokenService {
         dto.setScope("all");
         dto.setTokenType("grant");
 
-        JedisUtil.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
-        JedisUtil.set(token, appKey, 720);
+        jedisService.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
+        jedisService.set(token, appKey, 720);
 
         return dto;
     }
