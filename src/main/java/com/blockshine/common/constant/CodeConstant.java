@@ -54,6 +54,11 @@ public class CodeConstant {
      * token不正确
      */
     public static final int EXCEPTION_TOKEN = 4000103;
+    
+    /**
+     * AppKey不存在
+     */
+    public static final int APPKEY_LOST = 4000201;
 
 
     /**

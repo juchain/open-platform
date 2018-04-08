@@ -108,8 +108,9 @@ public class TokenServiceImpl implements TokenService {
     }
 
 	@Override
-	public String getByKey(String token) {
-		return getByKey(token);
+	public String getAppKey(String token) {
+		
+		return jedisService.getByKey(token);
 	}
     
     

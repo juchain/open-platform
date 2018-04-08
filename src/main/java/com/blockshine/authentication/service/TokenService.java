@@ -12,6 +12,6 @@ public interface TokenService {
 
     public AuthorizationDTO generateToken(AuthorizationDTO dto);
     public AuthorizationDTO refreshToken(AuthorizationDTO dto);
-	public String getByKey(String token);
+	public String getAppKey(String token);
 
 }
