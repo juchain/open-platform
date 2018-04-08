@@ -106,4 +106,13 @@ public class TokenServiceImpl implements TokenService {
 
         return dto;
     }
+
+	@Override
+	public String getAppKey(String token) {
+		
+		return jedisService.getByKey(token);
+	}
+    
+    
+    
 }

@@ -74,7 +74,7 @@ public class BlockShineWebCallService {
             r.put("msg", "账户创建成功");
         }else{
             logger.info("账户创建失败");
-            r.put("code", CodeConstant.ACCOUNT_CREATE);
+            r.put("code", CodeConstant.ACCOUNT_ERR);
             r.put("msg", "账户创建失败");
         }
 		return r;
