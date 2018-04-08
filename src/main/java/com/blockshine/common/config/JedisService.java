@@ -17,8 +17,6 @@ public class JedisService implements ApplicationContextAware {
 
     public static JedisPool jedisPool=  null;
 
-    private static Logger logger = Logger.getLogger(JedisService.class);
-
     public JedisService(){
 
     }
@@ -29,8 +27,6 @@ public class JedisService implements ApplicationContextAware {
             synchronized (Jedis.class){
                 if (jedis ==null){
                     jedis = getJedisPool().getResource();
-                }else {
-                    logger.info("jedis is not null");
                 }
             }
         }
