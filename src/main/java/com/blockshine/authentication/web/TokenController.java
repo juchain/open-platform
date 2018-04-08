@@ -49,5 +49,16 @@ public class TokenController extends BaseController {
         r.put("tokenObject", tokenDTO);
         return r;
     }
+    
+    @RequestMapping("/check")
+    public R checkToken(@RequestBody String token){
+        if(StringUtils.isEmpty(token)){
+            return R.error(CodeConstant.PARAM_LOST, "token lost");
+        }
+    	String appKey = tokenService.getByKey(token);
+        R r = new R();
+        r.put("appKey", appKey);
+        return r;
+    }
 
 }

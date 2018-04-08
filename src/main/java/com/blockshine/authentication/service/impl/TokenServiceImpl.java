@@ -106,4 +106,12 @@ public class TokenServiceImpl implements TokenService {
 
         return dto;
     }
+
+	@Override
+	public String getByKey(String token) {
+		return getByKey(token);
+	}
+    
+    
+    
 }

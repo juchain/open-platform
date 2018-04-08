@@ -72,6 +72,7 @@ public class CodeConstant {
      */
     public static final int ACCOUNT_CREATE = 6000001;
 
+    public static final int ACCOUNT_ERR = 6000002;
 
 
     public static final String TOKEN = "token:";
