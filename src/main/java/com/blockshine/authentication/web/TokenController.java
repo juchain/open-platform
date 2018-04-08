@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.blockshine.authentication.dto.AuthorizationDTO;
 import com.blockshine.authentication.service.TokenService;
 import com.blockshine.common.constant.CodeConstant;
-import com.blockshine.common.exception.BusinessException;
 import com.blockshine.common.util.R;
 import com.blockshine.common.util.StringUtils;
 import com.blockshine.common.web.BaseController;
