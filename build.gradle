@@ -18,7 +18,6 @@ apply plugin: "com.github.johnrengelman.shadow"
  *  - useMavenLocal - prefer locally installed maven libraries.
  *
  * System properties (supplied with `-D` prefix):
- *
  * Default heap size is 1.5G, unless user change via command line or run `runPrivate` task,
  * which sets 3.5 GB.
  */
