@@ -2,9 +2,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.100.175.16:3306/open_platform?useUnicode=true&characterEncoding=utf8
-    username: openfadmin
-    password: DevBlock.123!
+    url: jdbc:mysql://172.19.23.98:3306/open_platform?useUnicode=true&characterEncoding=utf8
+    username: webadmin
+    password: OnBlock.123!
     initialSize: 1
     minIdle: 3
     maxActive: 20
@@ -29,7 +29,7 @@ spring:
     #useGlobalDataSourceStat: true
 
   redis:
-    host: 47.100.174.228
+    host: 
     port: 6379
     password:
     # 连接超时时间（毫秒）
@@ -47,14 +47,8 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: mybatis/*Mapper.xml
+  mapper-locations: mybatis/*/*Mapper.xml
   typeAliasesPackage: com.blockshine.**.dto
 
-server:
-  port: 8080
 
-tomcat:
-  connector:
-    maxthreadstimecpus: 4
-    maxconnections: 500
 
