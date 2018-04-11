@@ -3,9 +3,13 @@ package com.blockshine.common.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.blockshine.common.constant.CodeConstant;
+import com.blockshine.common.exception.BusinessException;
+
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.Set;
 
@@ -16,7 +20,8 @@ public class JedisService {
 	@Autowired
 	private JedisPool jedisPool;
 
-	private Jedis jedis = null;  
+	private Jedis jedis;
+	
 	 /** 
      * 获取Jedis对象 
      * @return 
@@ -28,10 +33,10 @@ public class JedisService {
                      jedis = jedisPool.getResource();
                 }
             }catch(Exception e){  
-//            	jedisPool.close();
             	log.error("getJedis error"+e);
+            	throw  new BusinessException("can not get jedis", CodeConstant.JEDIS_ERROR);
             }  
-        }  
+        }
         return jedis;  
     }  
       
@@ -64,8 +69,7 @@ public class JedisService {
 	 * @return
 	 */
 	public boolean hasKey(String key) {
-
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 		try {
 			return jedis.exists(key);
 		}finally {
@@ -82,7 +86,7 @@ public class JedisService {
 	 * @return
 	 */
 	public String set(String key, String value) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 		try {
 			return jedis.set(key, value);
 		} finally {
@@ -101,7 +105,7 @@ public class JedisService {
 	 * @return
 	 */
 	public String set(String key, String value, int timeOut) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 		try {
 			return jedis.setex(key, timeOut, value);
 		} finally {
@@ -120,7 +124,7 @@ public class JedisService {
 	 * @return
 	 */
 	public String setex(String key, String value, int timeOut) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			return jedis.setex(key.getBytes(), timeOut, value.getBytes());
@@ -137,7 +141,7 @@ public class JedisService {
 	 * @return
 	 */
 	public byte[] getex(String key) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 		try {
 			return jedis.get(key.getBytes());
 		} finally {
@@ -153,7 +157,7 @@ public class JedisService {
 	 * @return
 	 */
 	public String getByKey(String key) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			return jedis.get(key);
@@ -170,7 +174,7 @@ public class JedisService {
 	 * @return
 	 */
 	public Set<String> getKesByPattern(String pattern) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			return jedis.keys(pattern);
@@ -186,7 +190,7 @@ public class JedisService {
 	 * @param key
 	 */
 	public void delByKey(String key) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			jedis.del(key);
@@ -203,7 +207,7 @@ public class JedisService {
 	 * @return
 	 */
 	public long getTimeOutByKey(String key) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			return jedis.ttl(key);
@@ -217,7 +221,7 @@ public class JedisService {
 	 * 清空数据 【慎用啊！】
 	 */
 	public void flushDB() {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			jedis.flushDB();
@@ -235,7 +239,7 @@ public class JedisService {
 	 * @return
 	 */
 	public long refreshLiveTime(String key, int timeOut) {
-		Jedis jedis = getJedis();
+		jedis = getJedis();
 
 		try {
 			return jedis.expire(key, timeOut);
@@ -255,4 +259,5 @@ public class JedisService {
 //			jedisPool.returnResource(jedis);
 //		}
 	}
+	
 }

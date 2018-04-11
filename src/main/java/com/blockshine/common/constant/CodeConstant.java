@@ -59,6 +59,11 @@ public class CodeConstant {
      * AppKey不存在
      */
     public static final int APPKEY_LOST = 4000201;
+    
+    /**
+     * 拒绝服务
+     */
+    public static final int JEDIS_ERROR = 4000301;
 
 
     /**
