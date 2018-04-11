@@ -24,6 +24,8 @@ public class JedisService {
 	 */
 	public synchronized Jedis getJedis() {
 		Jedis jedis = null;
+		jedisPool.close();
+		jedisPool = new JedisPool("172.19.255.199");
 		if (jedisPool != null) {
 			try {
 				jedis = jedisPool.getResource();
