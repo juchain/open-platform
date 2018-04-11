@@ -9,7 +9,6 @@ import com.blockshine.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 import java.util.Set;
 
@@ -21,46 +20,47 @@ public class JedisService {
 	private JedisPool jedisPool;
 
 	private Jedis jedis;
-	
-	 /** 
-     * 获取Jedis对象 
-     * @return 
-     */  
-    public synchronized  Jedis getJedis(){  
-        if(jedisPool != null){  
-            try{  
-                if(jedis == null ){  
-                     jedis = jedisPool.getResource();
-                }
-            }catch(Exception e){  
-            	log.error("getJedis error"+e);
-            	throw  new BusinessException("can not get jedis", CodeConstant.JEDIS_ERROR);
-            }  
-        }
-        return jedis;  
-    }  
-      
-      
-    /** 
-     * 回收Jedis对象资源 
-     * @param jedis 
-     */  
-    public synchronized  void returnResource(Jedis  jedis){  
-        if(jedis != null){  
-            jedisPool.returnResource(jedis);  
-        }  
-    }  
-      
-    /** 
-     * Jedis对象出异常的时候，回收Jedis对象资源 
-     * @param jedis 
-     */  
-    public synchronized  void returnBrokenResource(Jedis  jedis){  
-        if(jedis != null){  
-            jedisPool.returnBrokenResource(jedis);  
-        }  
-    }  
 
+	/**
+	 * 获取Jedis对象
+	 * 
+	 * @return
+	 */
+	public synchronized Jedis getJedis() {
+		if (jedisPool != null) {
+			try {
+				if (jedis == null) {
+					jedis = jedisPool.getResource();
+				}
+			} catch (Exception e) {
+				log.error("getJedis error" + e);
+				throw new BusinessException("can not get jedis", CodeConstant.JEDIS_ERROR);
+			}
+		}
+		return jedis;
+	}
+
+	/**
+	 * 回收Jedis对象资源
+	 * 
+	 * @param jedis
+	 */
+	public synchronized void returnResource(Jedis jedis) {
+		if (jedis != null) {
+			jedisPool.returnResource(jedis);
+		}
+	}
+
+	/**
+	 * Jedis对象出异常的时候，回收Jedis对象资源
+	 * 
+	 * @param jedis
+	 */
+	public synchronized void returnBrokenResource(Jedis jedis) {
+		if (jedis != null) {
+			jedisPool.returnBrokenResource(jedis);
+		}
+	}
 
 	/**
 	 * 根据key查看是否存在
@@ -72,7 +72,7 @@ public class JedisService {
 		jedis = getJedis();
 		try {
 			return jedis.exists(key);
-		}finally {
+		} finally {
 			returnJedis(jedis);
 		}
 
@@ -255,9 +255,9 @@ public class JedisService {
 	 * @param jedis
 	 */
 	public void returnJedis(Jedis jedis) {
-//		if (null != jedis && null != jedisPool) {
-//			jedisPool.returnResource(jedis);
-//		}
+		// if (null != jedis && null != jedisPool) {
+		// jedisPool.returnResource(jedis);
+		// }
 	}
-	
+
 }
