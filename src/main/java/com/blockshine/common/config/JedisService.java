@@ -47,7 +47,7 @@ public class JedisService {
 	 */
 	public synchronized void returnResource(Jedis jedis) {
 		if (jedis != null) {
-			jedisPool.returnResource(jedis);
+			jedisPool.close();
 		}
 	}
 
@@ -58,7 +58,7 @@ public class JedisService {
 	 */
 	public synchronized void returnBrokenResource(Jedis jedis) {
 		if (jedis != null) {
-			jedisPool.returnBrokenResource(jedis);
+			jedisPool.close();
 		}
 	}
 
@@ -255,9 +255,16 @@ public class JedisService {
 	 * @param jedis
 	 */
 	public void returnJedis(Jedis jedis) {
-		// if (null != jedis && null != jedisPool) {
-		// jedisPool.returnResource(jedis);
-		// }
+		jedisPool.close();
 	}
 
+//	public static void main(String[] args) {
+//		 JedisPool jap = new JedisPool("47.100.174.228",6379);
+//		  System.out.println(jap);
+//		  Jedis jedis = jap.getResource();
+//		  
+//		  System.out.println(jedis);
+//
+//	}
+	
 }
