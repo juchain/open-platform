@@ -29,7 +29,7 @@ spring:
     #useGlobalDataSourceStat: true
 
   redis:
-    host: 172.19.255.199
+    host: redis
     port: 6379
     password:
     # 连接超时时间（毫秒）
