@@ -24,8 +24,8 @@ public class JedisService {
 	 */
 	public synchronized Jedis getJedis() {
 		Jedis jedis = null;
-		jedisPool.close();
-		jedisPool = new JedisPool("172.19.255.199");
+//		jedisPool.close();
+//		jedisPool = new JedisPool("172.19.255.199");
 		if (jedisPool != null) {
 			try {
 				jedis = jedisPool.getResource();
@@ -231,17 +231,18 @@ public class JedisService {
 	}
 
 //	public static void main(String[] args) {
-//		JedisPool jap = new JedisPool("47.100.174.228", 6379);
-//		for (int i = 0; i < 10; i++) {
-//			// JedisPool jap = new JedisPool("47.100.174.228",6379);
-//			System.out.println(jap);
-//			Jedis jedis = jap.getResource();
-//			System.out.println(i + "---" + jedis);
-//			jedis.close();
-//			if (i == 9) {
-//				System.out.println("adf");
-//			}
-//		}
+//		JedisPool jap = new JedisPool("47.100.174.221", 6379);
+//		System.out.println(jap.isClosed());
+////		for (int i = 0; i < 10; i++) {
+////			// JedisPool jap = new JedisPool("47.100.174.228",6379);
+////			System.out.println(jap);
+////			Jedis jedis = jap.getResource();
+////			System.out.println(i + "---" + jedis);
+////			jedis.close();
+////			if (i == 9) {
+////				System.out.println("adf");
+////			}
+////		}
 //
 //	}
 
