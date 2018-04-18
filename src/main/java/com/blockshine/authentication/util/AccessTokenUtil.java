@@ -31,10 +31,50 @@ public class AccessTokenUtil {
 
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println("BM14__KJXJUZZBRXDPADBA".length());
+    
+    public static String generateLoginToken(String userId){
+        String token = CryptUtil.getSHA256Str(MD5Utils.encrypt(userId)+RandomUtil.getRandomCode());
+        try {
+            String returnStr =  Base64Utils.encode(token);
+            if(returnStr.length() >30){
+                returnStr = returnStr.substring(0, 29);
+            }
+            return returnStr;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            BusinessException businessException = new BusinessException(e.getMessage(), CodeConstant.INTERAL_ERROR);
+            throw businessException;
+        }
     }
+
+//    public static void main(String[] args) {
+//    	
+//    	 String token = CryptUtil.getSHA256Str(MD5Utils.encrypt("11")+RandomUtil.getRandomCode());
+//         try {
+//             String returnStr =  Base64Utils.encode(token);
+//             if(returnStr.length() >30){
+//                 returnStr = returnStr.substring(0, 29);
+//             }
+//             System.out.println(returnStr);
+//         } catch (UnsupportedEncodingException e) {
+//             e.printStackTrace();
+//             BusinessException businessException = new BusinessException(e.getMessage(), CodeConstant.INTERAL_ERROR);
+//             throw businessException;
+//         }
+//         
+//         token = CryptUtil.getSHA256Str(MD5Utils.encrypt("11")+RandomUtil.getRandomCode());
+//         try {
+//             String returnStr =  Base64Utils.encode(token);
+//             if(returnStr.length() >30){
+//                 returnStr = returnStr.substring(0, 29);
+//             }
+//             System.out.println(returnStr);
+//         } catch (UnsupportedEncodingException e) {
+//             e.printStackTrace();
+//             BusinessException businessException = new BusinessException(e.getMessage(), CodeConstant.INTERAL_ERROR);
+//             throw businessException;
+//         }
+//    }
 
 
 }

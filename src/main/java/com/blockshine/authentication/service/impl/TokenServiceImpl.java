@@ -2,12 +2,13 @@ package com.blockshine.authentication.service.impl;
 
 import com.blockshine.authentication.dto.ApplicationDTO;
 import com.blockshine.authentication.dto.AuthorizationDTO;
+import com.blockshine.authentication.dto.LoginDTO;
 import com.blockshine.authentication.service.TokenService;
 import com.blockshine.authentication.util.AccessTokenUtil;
 import com.blockshine.common.config.JedisService;
 import com.blockshine.common.exception.BusinessException;
+import com.blockshine.common.util.StringUtils;
 import com.blockshine.common.constant.CodeConstant;
-
 
 import com.blockshine.authentication.dao.ApplicationDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,103 +17,125 @@ import org.springframework.stereotype.Service;
 @Service
 public class TokenServiceImpl implements TokenService {
 
-
-	
 	@Autowired
-    ApplicationDao applicationDao;
+	ApplicationDao applicationDao;
 	@Autowired
-    JedisService jedisService;
+	JedisService jedisService;
 
-    @Override
-    public AuthorizationDTO generateToken(AuthorizationDTO dto) {
-    	ApplicationDTO adto = new ApplicationDTO();
+	@Override
+	public AuthorizationDTO generateToken(AuthorizationDTO dto) {
+		ApplicationDTO adto = new ApplicationDTO();
 
-    	adto.setAppKey(dto.getAppKey());
-    	adto.setAppSecret(dto.getAppSecret());
+		adto.setAppKey(dto.getAppKey());
+		adto.setAppSecret(dto.getAppSecret());
 
-    	int flag = applicationDao.getAuthentication(adto);
-    	boolean validatePass = flag > 0 ? true : false;
+		int flag = applicationDao.getAuthentication(adto);
+		boolean validatePass = flag > 0 ? true : false;
 
-        BusinessException businessException = null;
-        if(!validatePass){
-            businessException =
-                    new BusinessException("invalid AppKey or appSecret!", CodeConstant.PARAM_ERROR);
-            throw businessException;
-        }
+		BusinessException businessException = null;
+		if (!validatePass) {
+			businessException = new BusinessException("invalid AppKey or appSecret!", CodeConstant.PARAM_ERROR);
+			throw businessException;
+		}
 
-        validToken(dto);
+		validToken(dto);
 
-        String token = AccessTokenUtil.generateToken(dto.getAppKey(), dto.getAppSecret());
-    	String refreshToken = AccessTokenUtil.generateToken(dto.getAppKey(), dto.getAppSecret());
+		String token = AccessTokenUtil.generateToken(dto.getAppKey(), dto.getAppSecret());
+		String refreshToken = AccessTokenUtil.generateToken(dto.getAppKey(), dto.getAppSecret());
 
-    	dto.setToken(token);
-        dto.setExpiryTime(720);
-        dto.setRefreshToken(refreshToken);
-        dto.setScope("all");
-        dto.setTokenType("grant");
+		dto.setToken(token);
+		dto.setExpiryTime(720);
+		dto.setRefreshToken(refreshToken);
+		dto.setScope("all");
+		dto.setTokenType("grant");
 
-        jedisService.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
-        jedisService.set(CodeConstant.REFRESH_TOKEN + dto.getAppKey(), refreshToken);
-        jedisService.set(token, dto.getAppKey(), 720);
-        jedisService.set(refreshToken, dto.getAppKey());
+		jedisService.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
+		jedisService.set(CodeConstant.REFRESH_TOKEN + dto.getAppKey(), refreshToken);
+		jedisService.set(token, dto.getAppKey(), 720);
+		jedisService.set(refreshToken, dto.getAppKey());
 
+		return dto;
 
-        return dto;
+	}
 
+	/**
+	 * 校验token是否存在，防止恶意重置token
+	 * 
+	 * @param dto
+	 */
+	private void validToken(AuthorizationDTO dto) {
+		BusinessException businessException;
+		if (jedisService.hasKey(CodeConstant.TOKEN + dto.getAppKey())) {
+			businessException = new BusinessException("token exists!", CodeConstant.SERVICE_REFUSED);
 
-    }
+			throw businessException;
+		}
+	}
 
-    /**
-     * 校验token是否存在，防止恶意重置token
-     * @param dto
-     */
-    private void validToken(AuthorizationDTO dto) {
-        BusinessException businessException;
-        if(jedisService.hasKey(CodeConstant.TOKEN + dto.getAppKey())){
-            businessException =
-                    new BusinessException("token exists!", CodeConstant.SERVICE_REFUSED);
+	@Override
+	public AuthorizationDTO refreshToken(AuthorizationDTO dto) {
+		BusinessException businessException = null;
 
-            throw businessException;
-        }
-    }
+		if (!jedisService.hasKey(dto.getRefreshToken())) {
+			businessException = new BusinessException("refreshToken not exist!", CodeConstant.SERVICE_REFUSED);
 
-    @Override
-    public AuthorizationDTO refreshToken(AuthorizationDTO dto) {
-        BusinessException businessException = null;
+			throw businessException;
+		}
 
-        if(!jedisService.hasKey(dto.getRefreshToken())){
-            businessException =
-                    new BusinessException("refreshToken not exist!", CodeConstant.SERVICE_REFUSED);
+		String appKey = jedisService.getByKey(dto.getRefreshToken());
 
-            throw businessException;
-        }
+		dto.setAppKey(appKey);
+		validToken(dto);
 
-        String appKey = jedisService.getByKey(dto.getRefreshToken());
+		String appSecret = applicationDao.findAppSecret(appKey);
 
-        dto.setAppKey(appKey);
-        validToken(dto);
+		String token = AccessTokenUtil.generateToken(appKey, appSecret);
 
-        String appSecret = applicationDao.findAppSecret(appKey);
+		dto.setToken(token);
+		dto.setExpiryTime(720);
+		dto.setScope("all");
+		dto.setTokenType("grant");
 
-        String token = AccessTokenUtil.generateToken(appKey, appSecret);
+		jedisService.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
+		jedisService.set(token, appKey, 720);
 
-        dto.setToken(token);
-        dto.setExpiryTime(720);
-        dto.setScope("all");
-        dto.setTokenType("grant");
-
-        jedisService.set(CodeConstant.TOKEN + dto.getAppKey(), token, 720);
-        jedisService.set(token, appKey, 720);
-
-        return dto;
-    }
+		return dto;
+	}
 
 	@Override
 	public String getAppKey(String token) {
-		
 		return jedisService.getByKey(token);
 	}
-    
-    
-    
+
+	@Override
+	public LoginDTO generateLoginToken(LoginDTO dto) {
+
+		String token = AccessTokenUtil.generateLoginToken(dto.getUserId());
+
+		dto.setToken(token);
+		dto.setExpiryTime(720);
+		dto.setScope("all");
+		dto.setTokenType("grant");
+
+		jedisService.set(CodeConstant.TOKEN + dto.getUserId(), token, 720);
+		jedisService.set(token, dto.getUserId(), 720);
+
+		return dto;
+	}
+
+	@Override
+	public boolean checkLogin(String token) {
+		String value = jedisService.getByKey(token);
+		if (StringUtils.isEmpty(value)) {
+			return false;
+		}
+		long outTime = jedisService.getTimeOutByKey(token);
+		if (outTime < 60) {
+			//重置token
+			jedisService.set(CodeConstant.TOKEN + value, token, 720);
+			jedisService.set(token, value, 720);
+		}
+		return true;
+	}
+
 }

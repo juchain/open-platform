@@ -2,6 +2,7 @@ package com.blockshine.authentication.web;
 
 import com.alibaba.fastjson.JSON;
 import com.blockshine.authentication.dto.AuthorizationDTO;
+import com.blockshine.authentication.dto.LoginDTO;
 import com.blockshine.authentication.service.TokenService;
 import com.blockshine.common.constant.CodeConstant;
 import com.blockshine.common.util.R;
@@ -68,5 +69,32 @@ public class TokenController extends BaseController {
         r.put("appKey", appKey);
         return r;
     }
+    
+    @RequestMapping("/loginApply")
+    public R generateLoginToken(@RequestBody LoginDTO dto){
+        if(StringUtils.isEmpty(dto.getUserId())){
+            return R.error(CodeConstant.PARAM_LOST, "userId lost");
+        }
+        LoginDTO loginDTO = tokenService.generateLoginToken(dto);
+        R r = new R();
+        r.put("loginObject", loginDTO);
+        return r;
+    }
+    
+    @RequestMapping("/loginCheck")
+    public R loginCheck(@RequestBody String token){
+        if(StringUtils.isEmpty(token) && JSON.parseObject(token).get("token").toString() != null){
+            return R.error(CodeConstant.PARAM_LOST, "token lost");
+        }
+        token = JSON.parseObject(token).get("token").toString();
+    	boolean isOk = tokenService.checkLogin(token);
+    	 if(!isOk){
+    		 return R.error(CodeConstant.APPKEY_LOST, "token:"+token+" 不存在!");
+		}
+        R r = new R();
+        return r;
+    }
+    
+    
 
 }
