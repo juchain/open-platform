@@ -92,6 +92,7 @@ public class TokenController extends BaseController {
     		 return R.error(CodeConstant.APPKEY_LOST, "token:"+token+" 不存在!");
 		}
         R r = new R();
+        r.put("check", "Success");
         return r;
     }
     
