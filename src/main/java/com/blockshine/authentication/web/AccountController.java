@@ -28,7 +28,6 @@ public class AccountController {
 	@PostMapping("/init")
 	public JSONObject list(@RequestBody Map<String, Object> params){
 		JSONObject jsonObject = blockShineWebCallService.accountInit(params);
-
 		return jsonObject;
 
 	}

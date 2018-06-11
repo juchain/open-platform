@@ -1,10 +1,11 @@
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
-    driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://47.100.175.16:3306/website?useUnicode=true&characterEncoding=utf8
-    username: pentaadmin
-    password: DevBlock.123!
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/open_platform?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Hongkong
+    #?useUnicode=true&characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
     initialSize: 1
     minIdle: 3
     maxActive: 20
@@ -29,7 +30,7 @@ spring:
     #useGlobalDataSourceStat: true
 
   redis:
-    host: redis
+    host: 127.0.0.1
     port: 6379
     password:
     # 连接超时时间（毫秒）
